@@ -1,0 +1,14 @@
+//
+//  CSPMyEquipmentRoomViewController.h
+//  CloudSailProtection
+//
+//  Created by Ice on 11/14/15.
+//  Copyright © 2015 neusoft. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+#import "CSPTransitionsTabBarBaseViewController.h"
+
+@interface CSPBreakdownsViewController : CSPTransitionsTabBarBaseViewController
+
+@end

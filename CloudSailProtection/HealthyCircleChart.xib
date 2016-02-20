@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9531"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view multipleTouchEnabled="YES" contentMode="scaleToFill" id="iN0-l3-epB" customClass="HealthyCircleChartView">
+            <rect key="frame" x="0.0" y="0.0" width="220" height="220"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="B4u-a3-RMx" customClass="TCircleView">
+                    <rect key="frame" x="0.0" y="0.0" width="220" height="220"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kkf-EM-lsU" userLabel="shelterView">
+                    <rect key="frame" x="110" y="188" width="20" height="20"/>
+                    <color key="backgroundColor" red="0.9137254901960784" green="0.94117647058823528" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="B4u-a3-RMx" secondAttribute="trailing" id="Ix0-gu-3Zt"/>
+                <constraint firstItem="B4u-a3-RMx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="OSm-TX-vjD"/>
+                <constraint firstItem="B4u-a3-RMx" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="QTe-9k-x04"/>
+                <constraint firstAttribute="bottom" secondItem="B4u-a3-RMx" secondAttribute="bottom" id="c31-7O-5g8"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="circleChart" destination="B4u-a3-RMx" id="ZIA-tl-JtQ"/>
+                <outlet property="shelterView" destination="Kkf-EM-lsU" id="xxS-g9-c77"/>
+            </connections>
+        </view>
+    </objects>
+</document>
