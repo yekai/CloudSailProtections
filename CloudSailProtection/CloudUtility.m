@@ -27,4 +27,9 @@
 {
     return [UIScreen mainScreen].bounds.size.width > 375;
 }
+
++ (NSString *)isNullString:(NSString *)string
+{
+    return [string isEqual:[NSNull null]] ? @"" : string;
+}
 @end

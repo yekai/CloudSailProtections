@@ -216,7 +216,7 @@
 
 - (void)createTrackBarChart
 {
-    if (self.trackBarChart || ![[SessionManager sharedManager]isLoggedIn])
+    if (self.trackBarChart || ![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.faultInfos || self.mainAttributes.faultInfos.count == 0)
     {
         return;
     }
@@ -296,7 +296,7 @@
 - (void)createWarningBarChart
 {
     
-    if (![[SessionManager sharedManager]isLoggedIn] || self.warningBarChart)
+    if (![[SessionManager sharedManager]isLoggedIn] || self.warningBarChart || !self.mainAttributes.alarmInfos || self.mainAttributes.alarmInfos.count == 0)
     {
         return;
     }

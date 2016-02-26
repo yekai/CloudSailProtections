@@ -8,6 +8,7 @@
 
 #import "EnergyConsumptionTableViewCell.h"
 #import "PUEObj.h"
+#import "CloudUtility.h"
 
 @implementation EnergyConsumptionTableViewCell
 
@@ -23,10 +24,10 @@
 
 - (void)setValueFromPueObj:(PUEObj *)pue
 {
-    self.date.text = [pue.time substringToIndex:10];
-    self.pue.text = pue.value;
-    self.totalEnergyConsumption.text = pue.value;
-    self.ITEC.text = pue.value;
+    self.date.text = [CloudUtility isNullString: pue.time].length > 10 ? [pue.time substringToIndex:10] : @"";
+    self.pue.text = [CloudUtility isNullString: pue.value];
+    self.totalEnergyConsumption.text = [CloudUtility isNullString: pue.value];
+    self.ITEC.text = [CloudUtility isNullString: pue.value];
 }
 
 @end

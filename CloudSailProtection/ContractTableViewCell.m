@@ -8,6 +8,7 @@
 
 #import "ContractTableViewCell.h"
 #import "Agreements.h"
+#import "CloudUtility.h"
 
 @interface ContractTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *corporationName;
@@ -36,14 +37,14 @@
 - (void)setValueFromAgreements:(Agreements *)agreement
 {
     
-    self.corporationName.text = agreement.name;
-    self.dateRange.text = [NSString stringWithFormat:@"%@到%@",agreement.startTimeString, agreement.endTimeString];
-    self.serviceHours.text = [NSString stringWithFormat:@"%@小时", agreement.serviceTime];
-    self.spotFrequency.text = [NSString stringWithFormat:@"%@次/年", agreement.scenerate];
-    self.remoteFrequency.text = [NSString stringWithFormat:@"%@次/天", agreement.remoteRate];
-    self.respondTime.text = [NSString stringWithFormat:@"%@小时", agreement.response];
-    self.requiredReachSpotTime.text = [NSString stringWithFormat:@"%@小时", agreement.reachScene];
-    self.requiredResolveTime.text = [NSString stringWithFormat:@"%@小时", agreement.solve];
+    self.corporationName.text = [CloudUtility isNullString: agreement.name];
+    self.dateRange.text = [NSString stringWithFormat:@"%@到%@",[CloudUtility isNullString: agreement.startTimeString], [CloudUtility isNullString: agreement.endTimeString]];
+    self.serviceHours.text = [NSString stringWithFormat:@"%@小时", [CloudUtility isNullString: agreement.serviceTime]];
+    self.spotFrequency.text = [NSString stringWithFormat:@"%@次/年", [CloudUtility isNullString: agreement.scenerate]];
+    self.remoteFrequency.text = [NSString stringWithFormat:@"%@次/天",[CloudUtility isNullString:  agreement.remoteRate]];
+    self.respondTime.text = [NSString stringWithFormat:@"%@小时", [CloudUtility isNullString: agreement.response]];
+    self.requiredReachSpotTime.text = [NSString stringWithFormat:@"%@小时", [CloudUtility isNullString: agreement.reachScene]];
+    self.requiredResolveTime.text = [NSString stringWithFormat:@"%@小时", [CloudUtility isNullString: agreement.solve]];
 }
 
 @end

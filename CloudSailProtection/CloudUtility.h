@@ -14,4 +14,6 @@
 + (NSString *)stringFromDateNow;
 + (NSString *)stringFromDate:(NSDate *)date;
 + (BOOL)isIphone6S;
++ (NSString *)isNullString:(NSString *)string;
 @end
+

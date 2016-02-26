@@ -8,6 +8,7 @@
 
 #import "NoticesTableViewCell.h"
 #import "Notice.h"
+#import "CloudUtility.h"
 
 @interface NoticesTableViewCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *image;
@@ -34,8 +35,8 @@
 - (void)setValueFromNotice:(Notice *)notice withIndex:(NSInteger)index
 {
     self.name.text = [NSString stringWithFormat: @"公告信息%ld",index];
-    self.date.text = notice.recordtimeString;
-    self.content.text = notice.content;
+    self.date.text = [CloudUtility isNullString: notice.recordtimeString];
+    self.content.text = [CloudUtility isNullString: notice.content];
 }
 
 @end

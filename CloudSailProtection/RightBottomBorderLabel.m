@@ -29,3 +29,18 @@
 }
 
 @end
+
+@implementation BottomBorderLabel
+
+- (void)drawRect:(CGRect)rect {
+    // Drawing code
+    
+    CGRect bounds = self.bounds;
+    CGRect bottomBorderFrame = CGRectMake(0, bounds.size.height - 1, bounds.size.width, 1);
+    UIView *bottomBorder = [[UIView alloc]initWithFrame:bottomBorderFrame];
+    bottomBorder.backgroundColor = [UIColor colorWithRed:160/255.0 green:211/255.0 blue:247/255.0 alpha:1];
+    [self addSubview:bottomBorder];
+    [super drawRect:rect];
+}
+
+@end

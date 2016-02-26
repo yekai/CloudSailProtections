@@ -7,6 +7,7 @@
 //
 
 #import "RoutingObj.h"
+#import "CloudUtility.h"
 
 @implementation RoutingObj
 
@@ -18,7 +19,7 @@
         self.routingId = dict[@"routingId"] != [NSNull null] ? dict[@"routingId"] : @" ";
         self.routingName = dict[@"routingName"] != [NSNull null] ? dict[@"routingName"] : @" ";
         self.routingValue = dict[@"routingValue"] != [NSNull null] ? dict[@"routingValue"] : @" ";
-        self.time = dict[@"time"];
+        self.time = dict[@"time"] != [NSNull null] ?  dict[@"time"] : @" ";
     }
     
     return self;

@@ -11,3 +11,7 @@
 @interface RightBottomBorderLabel : UILabel
 
 @end
+
+@interface BottomBorderLabel : UILabel
+
+@end

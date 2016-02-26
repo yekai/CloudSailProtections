@@ -28,7 +28,8 @@
     self.title = @"公告信息";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"navigationDummy"] style:UIBarButtonItemStylePlain target:self action:@selector(toggleMenu)];
     
-    self.tableview.rowHeight = 120.0f;
+    self.tableview.estimatedRowHeight = 120.0f;
+    self.tableview.rowHeight=UITableViewAutomaticDimension;
     self.tableview.separatorColor = [UIColor colorWithRed:201/255.0 green:202/255.0 blue:233/255.0 alpha:1];
     self.tableview.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     

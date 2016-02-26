@@ -8,13 +8,15 @@
 
 #import "ContactsTableViewCell.h"
 #import "Communicator.h"
+#import "CloudUtility.h"
+
 @implementation ContactsTableViewCell
 
 -(void)setValueFromContacts:(Communicator *)contact
 {
-    self.provider.text = contact.name;
-    [self.phoneNumber setTitle:contact.phone forState:UIControlStateNormal];
-    [self.phoneNumber setTitle:contact.phone forState:UIControlStateHighlighted];
+    self.provider.text = [CloudUtility isNullString: contact.name];
+    [self.phoneNumber setTitle:[CloudUtility isNullString: contact.phone] forState:UIControlStateNormal];
+    [self.phoneNumber setTitle:[CloudUtility isNullString: contact.phone] forState:UIControlStateHighlighted];
 }
 
 
