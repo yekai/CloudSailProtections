@@ -28,6 +28,9 @@
  */
 @property (nonatomic) UIImage *image;
 
+//The imageview that displays the tab's image
+@property (nonatomic) UIImageView *thumbnail;
+
 /**
  A callback block for when the user taps the tab.
  */

@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '1379532A86EFB5122C289B5D'
+               BlueprintIdentifier = '35113845AD52AAAB4D260A1D'
                BlueprintName = 'AMSmoothAlert'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libAMSmoothAlert.a'>

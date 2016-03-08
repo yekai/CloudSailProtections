@@ -11,3 +11,4 @@
 extern NSString * const kCSP_Username_Identifier;
 extern NSString * const kCSP_Username_Remember_Identifier;
 extern NSUInteger const kCSP_UserMenu_Tag;
+extern NSUInteger const kCSP_DefaultBtn_Tag;

@@ -19,4 +19,5 @@
 
 //get the root control view in menu page
 - (CSPTransitionsViewController *)getTabBarView;
+- (void)displayHomeView;
 @end

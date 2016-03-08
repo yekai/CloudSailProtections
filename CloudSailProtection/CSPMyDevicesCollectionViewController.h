@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface CSPMyDevicesCollectionViewController : UICollectionViewController
+#import "TabsBarBaseViewController.h"
+@interface CSPMyDevicesCollectionViewController : TabsBarBaseViewController
 
 @end

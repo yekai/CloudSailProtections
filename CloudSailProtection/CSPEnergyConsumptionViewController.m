@@ -33,7 +33,7 @@
     [super viewDidLoad];
     self.title = @"能耗";
     
-     UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
+     UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
     
     UIBarButtonItem *pue = [[UIBarButtonItem alloc]initWithTitle:@"PUE趋势图" style:UIBarButtonItemStylePlain target:self action:@selector(presentPueTrendGraphy)];
     
@@ -125,5 +125,12 @@
     return cell;
 }
 
-
+- (void)displayHomeViewWithTabIndex:(NSInteger)index
+{
+    __weak CSPTransitionsViewController *transitionView = [[CSPGlobalViewControlManager sharedManager]getTransitionControl];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [transitionView didSelectTabAtIndex:index];
+    }];
+}
 @end

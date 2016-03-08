@@ -140,6 +140,20 @@ static NSMutableArray *noticeArray = nil;
         UINavigationController *navControl = [[UINavigationController alloc]initWithRootViewController:contacts];
         [self presentViewController:navControl animated:YES completion:nil];
     }
+    
+    if (index == 4)
+    {
+        NSHTTPCookie *cookie;
+        NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+        for (cookie in [storage cookies])
+        {
+            [storage deleteCookie:cookie];
+        }
+        [[NSURLCache sharedURLCache] removeAllCachedResponses];
+        
+        CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
+        [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    }
 }
 
 - (void)didSelectNoticeAtIndex:(NSUInteger)index

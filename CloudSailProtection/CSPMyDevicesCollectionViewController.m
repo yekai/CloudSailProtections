@@ -15,9 +15,12 @@
 #import "CloudUtility.h"
 #import "CSPLoginViewController.h"
 #import "UIStoryBoard+New.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+
 
 @interface CSPMyDevicesCollectionViewController ()
 @property (nonatomic, strong) NSMutableArray *devicesArray;
+@property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @end
 
 @implementation CSPMyDevicesCollectionViewController
@@ -102,8 +105,11 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MyDeviceCollectionViewCell *cell = (MyDeviceCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    NSString *imageName = [(DeviceInfoObj*)(self.devicesArray[indexPath.row]) getImageName];
-    cell.image.image = [UIImage imageNamed:imageName];
+    
+    DeviceInfoObj *deviceObj = (DeviceInfoObj*)(self.devicesArray[indexPath.row]);
+    NSString *imageName = [deviceObj getImageName];
+    [cell.image sd_setImageWithURL:[NSURL URLWithString:[deviceObj url]]
+                  placeholderImage:[UIImage imageNamed:imageName] options:0];
     // Configure the cell
     
     return cell;

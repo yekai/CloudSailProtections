@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'A905D891F83D3BDFB3DFD385'
+               BlueprintIdentifier = '8FDA4726629A50C1E44A2B0D'
                BlueprintName = 'Classy'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libClassy.a'>

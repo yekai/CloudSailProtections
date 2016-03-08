@@ -85,8 +85,8 @@ static const float kReaderViewHeight = 200;
 {
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setFrame:CGRectMake(5, 23, 60, 24)];
-    [btn setTitle:@"关闭"  forState:UIControlStateNormal];
-    [btn setTitle:@"关闭"  forState:UIControlStateHighlighted];
+    [btn setTitle:@"返回"  forState:UIControlStateNormal];
+    [btn setTitle:@"返回"  forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(cancleSYQRCodeReading) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
 }

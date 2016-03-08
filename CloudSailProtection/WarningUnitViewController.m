@@ -88,6 +88,14 @@
     }];
     
     
+    [levelNumber enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj == [NSNull null])
+        {
+            [levelNumber removeObjectAtIndex:idx];
+        }
+    }];
+    
+
     [self setData:levelNumber];
     
     [_chartView animateWithXAxisDuration:1.4 yAxisDuration:1.4 easingOption:ChartEasingOptionEaseOutBack];
@@ -146,7 +154,7 @@
     
     self.title = @"告警统计";
     
-    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
+    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
     self.navigationItem.rightBarButtonItems = @[close];
 
     _parties = [NSMutableArray array];
@@ -178,9 +186,9 @@
     // add a lot of colors
     
     NSMutableArray *colors = [[NSMutableArray alloc] init];
-    [colors addObject:[UIColor greenColor]];
-    [colors addObject:[UIColor blueColor]];
     [colors addObject:[UIColor redColor]];
+    [colors addObject:[UIColor blueColor]];
+    [colors addObject:[UIColor greenColor]];
     [colors addObject:[UIColor grayColor]];
     [colors addObject:[UIColor orangeColor]];
     [colors addObject:[UIColor yellowColor]];
@@ -226,4 +234,13 @@
     NSLog(@"chartValueNothingSelected");
 }
 
+
+- (void)displayHomeViewWithTabIndex:(NSInteger)index
+{
+    __weak CSPTransitionsViewController *transitionView = [[CSPGlobalViewControlManager sharedManager]getTransitionControl];
+
+    [self dismissViewControllerAnimated:YES completion:^{
+        [transitionView didSelectTabAtIndex:index];
+    }];
+}
 @end

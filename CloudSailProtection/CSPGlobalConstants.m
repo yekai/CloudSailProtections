@@ -11,4 +11,4 @@
 NSString * const kCSP_Username_Identifier = @"CSP_USERNAME";
 NSString * const kCSP_Username_Remember_Identifier = @"CSP_USERNAME_REMEMBER";
 NSUInteger const kCSP_UserMenu_Tag = 111;
-
+NSUInteger const kCSP_DefaultBtn_Tag = 120;

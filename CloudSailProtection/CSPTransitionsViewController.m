@@ -13,6 +13,7 @@
 #import "CSPGlobalViewControlManager.h"
 #import "CSPWarningViewController.h"
 #import "CSPDefaultPageViewController.h"
+#import "JSBadgeView.h"
 
 @interface AHTabBarController()
 //reload each one tab item view
@@ -152,6 +153,15 @@
     
     [oldController.view removeGestureRecognizer:self.dynamicTransitionPanGesture];
     [viewController.view addGestureRecognizer:self.slidingViewController.panGesture];
+    
+    AHTabView *tabBarView = self.currentItem.tab;
+    [tabBarView.thumbnail.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[JSBadgeView class]])
+        {
+            [obj removeFromSuperview];
+        }
+    }];
+    
 }
 
 - (CSPDefaultPageViewController *)getFirstTabItem

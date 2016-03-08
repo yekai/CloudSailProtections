@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TabsBarBaseViewController.h"
+
 @import Charts;
-@interface WarningUnitViewController : UIViewController
+@interface WarningUnitViewController : TabsBarBaseViewController
 
 @end

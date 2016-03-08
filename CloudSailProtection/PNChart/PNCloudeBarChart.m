@@ -130,7 +130,7 @@
       
     [self addSubview:label];
       
-    label.frame = (CGRect){-10, sectionHeight * i + _chartMarginTop - kYLabelHeight/2.0, _yChartLabelWidth, kYLabelHeight};
+    label.frame = (CGRect){-10, sectionHeight * i + _chartMarginTop - kYLabelHeight/2.0 + 6, _yChartLabelWidth, kYLabelHeight};
 
     [_yChartLabels addObject:label];
   }

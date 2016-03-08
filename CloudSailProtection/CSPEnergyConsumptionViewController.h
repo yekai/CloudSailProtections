@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "CSPTransitionsTabBarBaseViewController.h"
-@interface CSPEnergyConsumptionViewController : UIViewController
+#import "TabsBarBaseViewController.h"
+
+@interface CSPEnergyConsumptionViewController : TabsBarBaseViewController
 
 @end

@@ -371,7 +371,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *token = [[SessionManager sharedManager]token];
     NSString *password = [[SessionManager sharedManager].user password];
     
-    NSString *dateString = isToday ? [CloudUtility stringFromDateNow] : [CloudUtility stringFromDate:[NSDate dateWithTimeInterval:-86400 sinceDate:[NSDate date]]];
+    NSString *dateString = isToday ? [CloudUtility stringFromDateNow] : [CloudUtility stringFromDate:[NSDate dateWithTimeInterval:- 86400 sinceDate:[NSDate date]]];
     NSString *previousDateString = [NSString stringWithFormat:@"%@000000",[dateString substringToIndex:9]];
     
 
@@ -521,7 +521,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *userId = [[SessionManager sharedManager].user loginId];
     NSString *token = [[SessionManager sharedManager]token];
     NSString *password = [[SessionManager sharedManager].user password];
-    NSString *requestPath = [NSString stringWithFormat:@"cloud/GetDeviceInfo/%@/%@/%@", userId,password,token];
+    NSString *requestPath = [NSString stringWithFormat:@"cloud/GetDeviceInfo/%@/%@/%@/1/20", userId,password,token];
     requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
     return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
                                          parameters:nil

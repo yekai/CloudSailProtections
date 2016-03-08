@@ -17,6 +17,7 @@
 
 @interface ContactsTableViewController ()
 @property (nonatomic, strong) NSMutableArray *contactsArray;
+@property (nonatomic, strong) IBOutlet UITableView *tableView;
 @end
 
 @implementation ContactsTableViewController
@@ -40,7 +41,7 @@
     }
     else
     {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStyleDone target:self action:@selector(closeContacts)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(closeContacts)];
     }
 }
 
@@ -125,4 +126,21 @@
     return cell;
 }
 
+
+- (void)displayHomeViewWithTabIndex:(NSInteger)index
+{
+    if (!self.isMenuNode)
+    {
+        __weak CSPTransitionsViewController *transitionView = [[CSPGlobalViewControlManager sharedManager]getTransitionControl];
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            [transitionView didSelectTabAtIndex:index];
+        }];
+    }
+    else
+    {
+        [super displayHomeViewWithTabIndex:index];
+    }
+    
+}
 @end

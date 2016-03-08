@@ -31,7 +31,7 @@
     self.title = isFromEnergyConsumption ? @"能耗" : @"故障";
     if (!isFromEnergyConsumption)
     {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
     }
     else
     {
@@ -91,19 +91,21 @@
         return;
     }
     
-    NSUInteger widthSpace = self.graphTypeSegment.bounds.size.width * 2 + ([CloudUtility isIphone6S] ? 150 : 80);
+    NSUInteger widthSpace = self.graphTypeSegment.bounds.size.width * 2 + ([CloudUtility isIphone6S] ? 110 : 40);
     
-    NSUInteger height = [CloudUtility isIphone6S] ? 500 : 460;
+    NSUInteger height = [CloudUtility isIphone6S] ? 460 : 420;
     // Creating the line chart
     FSLineChart* lineChart = [[FSLineChart alloc] initWithFrame:CGRectMake(30, 135, self.trendGraphBack.bounds.size.width - widthSpace, height)];
+    lineChart.lineWidth = 1;
+    lineChart.color = lineChart.fillColor;
     lineChart.verticalGridStep = 5;
-    lineChart.horizontalGridStep = 6;
-    lineChart.displayDataPoint = YES;
+    lineChart.horizontalGridStep = 4;
+    lineChart.displayDataPoint = NO;
     lineChart.valueLabelPosition = ValueLabelLeft;
     lineChart.drawInnerGrid = YES;
     lineChart.bezierSmoothing = YES;
-    lineChart.axisColor = [UIColor grayColor];
-    lineChart.innerGridColor = [UIColor lightGrayColor];
+    lineChart.axisColor = [UIColor blueColor];
+    lineChart.innerGridColor = [UIColor blueColor];
     lineChart.innerGridLineWidth = 1.0;
     lineChart.backgroundColor = [UIColor clearColor];
     
@@ -111,8 +113,18 @@
     NSMutableArray *chartDataArray = [NSMutableArray array];
     
     [routinsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [Xvalues addObject:obj[@"time"]];
-        [chartDataArray addObject:@([obj[@"count"] integerValue])];
+        
+        NSString *time = obj[@"time"];
+        if ([Xvalues containsObject:time])
+        {
+            NSInteger index = [Xvalues indexOfObject:time];
+            [chartDataArray replaceObjectAtIndex:index withObject:@([chartDataArray[index] integerValue] + [obj[@"count"] integerValue])];
+        }
+        else
+        {
+            [Xvalues addObject:obj[@"time"]];
+            [chartDataArray addObject:@([obj[@"count"] integerValue])];
+        }
     }];
     
     
@@ -127,6 +139,23 @@
     [lineChart setChartData:chartDataArray];
     self.lineChart = lineChart;
     [self.view addSubview:self.lineChart];
+    
+    UIView *verticalLine = [[UIView alloc]initWithFrame:CGRectMake(35, 135, 1, height)];
+    verticalLine.backgroundColor = lineChart.fillColor;
+    [self.view addSubview:verticalLine];
+    
+    UIView *horizontalLine = [[UIView alloc]initWithFrame:CGRectMake(35, 130 + height , CGRectGetWidth(self.lineChart.bounds), 1)];
+    horizontalLine.backgroundColor = lineChart.fillColor;
+    [self.view addSubview:horizontalLine];
 }
 
+
+- (void)displayHomeViewWithTabIndex:(NSInteger)index
+{
+    __weak CSPTransitionsViewController *transitionView = [[CSPGlobalViewControlManager sharedManager]getTransitionControl];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [transitionView didSelectTabAtIndex:index];
+    }];
+}
 @end

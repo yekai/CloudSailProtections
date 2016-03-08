@@ -28,10 +28,14 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view
     self.title = @"故障";
-    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
+    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
     UIBarButtonItem *unit = [[UIBarButtonItem alloc]initWithTitle:@"故障统计" style:UIBarButtonItemStylePlain target:self action:@selector(presentPueTrendGraphy:)];
     self.navigationItem.rightBarButtonItems = @[close,unit];
+}
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     [self reloadFaults];
 }
 
@@ -51,26 +55,23 @@
 - (void)reloadFaults
 {
     __block CSPBreakdownsViewController *weakSelf = self;
-    if (!_breakdowns)
-    {
-        _breakdowns = [NSMutableArray array];
-        __block NSMutableArray *weakBreakdowns = _breakdowns;
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        [Post getFaultsWithBlock:^(NSArray *faultsArray) {
-            [faultsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                Fault *fault = [[Fault alloc]initWithFaultAttributes:obj];
-                [weakBreakdowns addObject:fault];
-            }];
-            
-            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
-            [weakSelf.tableView reloadData];
-        }
-                 andFailureBlock:^{
-            CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-            [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    _breakdowns = [NSMutableArray array];
+    __block NSMutableArray *weakBreakdowns = _breakdowns;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [Post getFaultsWithBlock:^(NSArray *faultsArray) {
+        [faultsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Fault *fault = [[Fault alloc]initWithFaultAttributes:obj];
+            [weakBreakdowns addObject:fault];
         }];
+        
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        [weakSelf.tableView reloadData];
     }
+             andFailureBlock:^{
+        CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
+        [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

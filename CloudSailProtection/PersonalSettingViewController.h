@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TabsBarBaseViewController.h"
 
-@interface PersonalSettingViewController : UIViewController
+@interface PersonalSettingViewController : TabsBarBaseViewController
 
 @end

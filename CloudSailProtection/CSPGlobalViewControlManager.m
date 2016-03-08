@@ -44,4 +44,10 @@
     
     return alarmControl;
 }
+
+- (CSPMenuViewController *)getMenuViewControl
+{
+    ECSlidingViewController *slidingControl = [self rootCotrol];
+    return (CSPMenuViewController*)slidingControl.underLeftViewController;
+}
 @end

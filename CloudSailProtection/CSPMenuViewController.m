@@ -147,4 +147,9 @@
 {
     return (CSPTransitionsViewController*)self.transitionsNavigationController;
 }
+
+- (void)displayHomeView
+{
+    [self tableView:self.tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+}
 @end

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TabsBarBaseViewController.h"
 
-@interface CSPPUETrendGraphViewController : UIViewController
+@interface CSPPUETrendGraphViewController : TabsBarBaseViewController
 
 @end

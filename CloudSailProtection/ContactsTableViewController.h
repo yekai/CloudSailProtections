@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TabsBarBaseViewController.h"
 
-@interface ContactsTableViewController : UITableViewController
+@interface ContactsTableViewController : TabsBarBaseViewController
 
 @property (nonatomic, assign) BOOL isMenuNode;
 @end

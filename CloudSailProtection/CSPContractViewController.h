@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CSPContractViewController : UIViewController
+#import "TabsBarBaseViewController.h"
+
+@interface CSPContractViewController : TabsBarBaseViewController
 
 @end

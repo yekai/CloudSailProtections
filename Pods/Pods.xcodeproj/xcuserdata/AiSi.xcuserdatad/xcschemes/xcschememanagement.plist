@@ -39,12 +39,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>JSBadgeView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MBProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>Pods.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SDWebImage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -67,17 +77,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>10ABC2D3682168FBCF3757EB3FF3FBCD</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>1665AF973F8BFDD3B9FD8ED3C12B0079</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>2602F3D0DAC534568B6AD7EEA0DD1959</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>30D175643FEA4661466FC25C19BF6212</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3781E692DF801195CF5F4CC6122FC92C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -97,22 +112,27 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9DAACE3FD9344AEC184B5233A8D54DDD</key>
+		<key>65FD5CE5BE4215A5EE629DC722EDECCC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A19052DE46AA8710565A6B30BA61B8B1</key>
+		<key>6CB2C44F8380F84240F4EB25104B3912</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ACF691A35D84904512DB0C7245C1A23C</key>
+		<key>8A687B62AF0425540AE2BC44E01EB5EC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>DE93392C80D45AE8768EDBA0C493C1A8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EA15E9B379E3C588DE8F6C730B96798F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

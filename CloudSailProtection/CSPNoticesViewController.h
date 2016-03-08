@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TabsBarBaseViewController.h"
 
-@interface CSPNoticesViewController : UIViewController
+@interface CSPNoticesViewController : TabsBarBaseViewController
 
 @end

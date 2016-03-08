@@ -19,6 +19,7 @@
 @interface CSPEnergyConsumptionPUEViewController ()
 @property (weak, nonatomic) IBOutlet WMGaugeView *gaugeView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *gaugeViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @end
 
@@ -27,16 +28,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    [self createGaugeViewWithPUEData];
-    [self reloadPUEData];
-    
+   
     self.title = @"能耗";
     
-    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
+    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
     
     self.navigationItem.rightBarButtonItems = @[close];
+    
+    [self createGaugeViewWithPUEData];
 }
+
 
 - (void)closeSelf
 {
@@ -82,6 +83,15 @@
     _gaugeView.rangeLabelsFont = [UIFont fontWithName:@"Helvetica" size:0.04];
     _gaugeView.value = 0;
     
+    _backButton.backgroundColor = [UIColor colorWithRed:204/255.0 green:227/255.0 blue:241/255.0 alpha:1];
+    _backButton.layer.cornerRadius = 20;
+    [self.view sendSubviewToBack:_backButton];
+    
+    UITapGestureRecognizer* singleRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(presentEnergyConsumptionView)];
+    singleRecognizer.numberOfTapsRequired = 1; 
+    
+    [_gaugeView addGestureRecognizer:singleRecognizer];
+    
 }
 
 - (void)setGaugeViewValue:(NSNumber *)number
@@ -93,6 +103,7 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self reloadPUEData];
 }
 
 - (IBAction)presentEnergyConsumptionView

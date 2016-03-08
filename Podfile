@@ -9,3 +9,5 @@ pod "CNPPopupController", "~> 0.1.2"
 pod 'Classy', '~> 0.2.4'
 pod 'UICountingLabel', '~> 1.2.0'
 pod 'pop', '~>1.0.7'
+pod 'JSBadgeView'
+pod 'SDWebImage', '~>3.7'

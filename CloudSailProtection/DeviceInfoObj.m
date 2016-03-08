@@ -14,9 +14,11 @@
 {
     if (self = [super init])
     {
-        self.deviceName = device[@"assetName"];
-        self.deviceId = device[@"assetid"];
-        self.alarmNum = device[@"count"];
+        self.deviceName = device[@"assetTypeName"];
+        self.deviceId = device[@"assetTypeId"];
+        self.alarmNum = device[@"alarmCount"];
+        self.assetTypeCode = device[@"assetTypeCode"];
+        self.url = device[@"url"];
     }
     
     return self;

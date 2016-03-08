@@ -73,6 +73,7 @@
 		4D1799B61C1C645100BFD8F4 /* CSPAboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1799B51C1C645100BFD8F4 /* CSPAboutViewController.m */; };
 		4D1799B91C1C697300BFD8F4 /* CSPContractViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1799B81C1C697300BFD8F4 /* CSPContractViewController.m */; };
 		4D1799BC1C1C6D6300BFD8F4 /* ContractTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1799BB1C1C6D6300BFD8F4 /* ContractTableViewCell.m */; };
+		4D34BBB21C89DF930011F1B3 /* TabsBarBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D34BBB11C89DF920011F1B3 /* TabsBarBaseViewController.m */; };
 		4D8EFD4B1C26E8BF00895A66 /* PersonalSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8EFD4A1C26E8BF00895A66 /* PersonalSettingViewController.m */; };
 		4D8EFD501C26EB7D00895A66 /* PersonalSettingsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8EFD4F1C26EB7D00895A66 /* PersonalSettingsTableViewCell.m */; };
 		4D8EFD531C2845E400895A66 /* CloudUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D8EFD521C2845E400895A66 /* CloudUtility.m */; };
@@ -307,6 +308,8 @@
 		4D1799B81C1C697300BFD8F4 /* CSPContractViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPContractViewController.m; sourceTree = "<group>"; };
 		4D1799BA1C1C6D6300BFD8F4 /* ContractTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContractTableViewCell.h; sourceTree = "<group>"; };
 		4D1799BB1C1C6D6300BFD8F4 /* ContractTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContractTableViewCell.m; sourceTree = "<group>"; };
+		4D34BBB01C89DF920011F1B3 /* TabsBarBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabsBarBaseViewController.h; sourceTree = "<group>"; };
+		4D34BBB11C89DF920011F1B3 /* TabsBarBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabsBarBaseViewController.m; sourceTree = "<group>"; };
 		4D8EFD491C26E8BF00895A66 /* PersonalSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalSettingViewController.h; sourceTree = "<group>"; };
 		4D8EFD4A1C26E8BF00895A66 /* PersonalSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalSettingViewController.m; sourceTree = "<group>"; };
 		4D8EFD4E1C26EB7D00895A66 /* PersonalSettingsTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalSettingsTableViewCell.h; sourceTree = "<group>"; };
@@ -739,6 +742,8 @@
 				4D8EFD4A1C26E8BF00895A66 /* PersonalSettingViewController.m */,
 				4DAD9E051C38347300F400D3 /* CSPRoutingViewController.h */,
 				4DAD9E061C38347300F400D3 /* CSPRoutingViewController.m */,
+				4D34BBB01C89DF920011F1B3 /* TabsBarBaseViewController.h */,
+				4D34BBB11C89DF920011F1B3 /* TabsBarBaseViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -1027,6 +1032,7 @@
 				4DFDD47F1C1D7443000AA616 /* NoticesTableViewCell.m in Sources */,
 				4D1799521C08A59200BFD8F4 /* UIView+Layer.m in Sources */,
 				4DC4B36D1BFA1AA500ED3AEF /* CSPTransitionsTabBarBaseViewController.m in Sources */,
+				4D34BBB21C89DF930011F1B3 /* TabsBarBaseViewController.m in Sources */,
 				4D1799621C0C944800BFD8F4 /* MenuTableViewCell.m in Sources */,
 				4D8EFD591C285A5800895A66 /* Alarm.m in Sources */,
 				4D1799201C08A22C00BFD8F4 /* TCircleView.m in Sources */,

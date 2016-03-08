@@ -19,6 +19,10 @@
 #import "CSPLoginViewController.h"
 #import "UIStoryBoard+New.h"
 #import "CSPHeaderBar.h"
+#import "CSPGlobalConstants.h"
+#import "CSPGlobalViewControlManager.h"
+#import "JSBadgeView.h"
+
 
 @interface CSPDefaultPageViewController ()
 
@@ -49,6 +53,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *trackCountBtn;
 //healthy chart beat persons
 @property (weak, nonatomic) IBOutlet UILabel *beatNumberLabel;
+
+@property (nonatomic) NSInteger defaultBadge;
+@property (nonatomic) NSInteger warningBadge;
+@property (nonatomic) NSInteger breakdownBadge;
 @end
 
 @implementation CSPDefaultPageViewController
@@ -119,11 +127,72 @@
         [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
         //create three parts charts
         [weakSelf createGraphicsFromAttributes];
+        if (self.defaultBadge == 0 && self.breakdownBadge == 0 && self.warningBadge == 0)
+        {
+            [weakSelf reloadBadgeNumberForDefaultPage];
+
+        }
     }
                             andFailureBlock:^{
         //display the login page if the server response fail
         CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
         [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    }];
+}
+
+- (void)reloadBadgeNumberForDefaultPage
+{
+    typeof(self) __weak weakSelf = self;
+    [Post getHealthNumberWithBlock:^(NSUInteger count) {
+        self.defaultBadge = count;
+        [weakSelf reloadWarningBadgeNumber];
+    } andFailureBlock:^{
+        
+    }];
+}
+
+- (void)reloadWarningBadgeNumber
+{
+    typeof(self) __weak weakSelf = self;
+    [Post getAlarmsCountWithBlock:^(NSUInteger count) {
+        self.warningBadge = count;
+        [weakSelf reloadBreakdownBadgeNumber];
+    } andFailureBlock:^{
+        
+    }];
+}
+
+- (void)reloadBreakdownBadgeNumber
+{
+    typeof(self) __weak weakSelf = self;
+    [Post getFaultsCountWithBlock:^(NSUInteger count) {
+        self.breakdownBadge = count;
+        [weakSelf createTabBarBadgeView];
+    } andFailureBlock:^{
+        
+    }];
+}
+
+- (void)createTabBarBadgeView
+{
+    CSPTransitionsViewController *transitionView = [[CSPGlobalViewControlManager sharedManager]getTransitionControl];
+    NSMutableArray *tabBars = transitionView.tabs;
+    [tabBars enumerateObjectsUsingBlock:^(__kindof AHTabView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == 0 && self.defaultBadge != 0)
+        {
+            JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:obj.thumbnail alignment:JSBadgeViewAlignmentTopRight];
+            badgeView.badgeText = [@(self.defaultBadge) stringValue];
+        }
+        else if (idx == 1 && self.warningBadge != 0)
+        {
+            JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:obj.thumbnail alignment:JSBadgeViewAlignmentTopRight];
+            badgeView.badgeText = [@(self.warningBadge) stringValue];
+        }
+        else if (idx == 2 && self.breakdownBadge != 0)
+        {
+            JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:obj.thumbnail alignment:JSBadgeViewAlignmentTopRight];
+            badgeView.badgeText = [@(self.breakdownBadge) stringValue];
+        }
     }];
 }
 
@@ -263,7 +332,7 @@
     self.trackBarChart.chartMarginTop = 0.0;
     self.trackBarChart.chartMarginBottom = 0.0;
     self.trackBarChart.labelMarginTop = 10;
-    self.trackBarChart.yLabelSum = 6;
+    self.trackBarChart.yLabelSum = 3;
     self.trackBarChart.xLabelWidth = 5.0;
     self.trackBarChart.barWidth = 30;
     self.trackBarChart.chartMarginTop = 0;
@@ -328,10 +397,24 @@
         }
     }];
     
+    [numbers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj == [NSNull null])
+        {
+            [numbers removeObjectAtIndex:idx];
+        }
+    }];
+    
+    [xStatus enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (obj == [NSNull null])
+        {
+            [xStatus removeObjectAtIndex:idx];
+        }
+    }];
+    
     __block NSInteger maxY = [numbers[0] integerValue];
     
     [numbers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj integerValue] > maxY)
+        if (obj != [NSNull null] && [obj integerValue] > maxY)
         {
             maxY = [obj integerValue];
         }
@@ -351,10 +434,9 @@
     self.warningBarChart.chartMarginTop = 0.0;
     self.warningBarChart.chartMarginBottom = 0.0;
     self.warningBarChart.labelMarginTop = 10;
-    self.warningBarChart.yLabelSum = 6;
+    self.warningBarChart.yLabelSum = 3;
     self.warningBarChart.xLabelWidth = 5.0;
     self.warningBarChart.barWidth = 30;
-    self.warningBarChart.chartMarginTop = 0;
     self.warningBarChart.barBackgroundColor = [UIColor clearColor];
     
     
@@ -362,7 +444,7 @@
     self.warningBarChart.labelTextColor = blueColor;
     self.warningBarChart.showChartBorder = YES;
     [self.warningBarChart setXLabels:xStatus];
-    [self.warningBarChart setYMaxValue:maxY + 10];
+    [self.warningBarChart setYMaxValue:maxY + 7000];
     [self.warningBarChart setYValues:numbers];
     [self.warningBarChart setStrokeColors:backColors];
     self.warningBarChart.isGradientShow = NO;
@@ -474,5 +556,12 @@
     [self.healthyBackView addSubview:self.notPatrolBreakdownBarChart];
     
 }
+
+- (IBAction)warningOrTrackBtnTapped:(id)sender
+{
+    NSInteger tag = ((UIButton*)sender).tag - kCSP_DefaultBtn_Tag + 1;
+    [[[CSPGlobalViewControlManager sharedManager]getTransitionControl]didSelectTabAtIndex:tag];
+}
+
 
 @end

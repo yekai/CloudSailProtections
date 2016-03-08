@@ -10,6 +10,7 @@
 #import "Classy.h"
 #import "CSPGlobalConstants.h"
 #import "AFNetworkActivityIndicatorManager.h"
+#import <SDWebImage/SDImageCache.h>
 
 @interface AppDelegate ()
 
@@ -22,6 +23,10 @@
     // Override point for customization after application launch.
     NSURLCache *URLCache = [[NSURLCache alloc] initWithMemoryCapacity:4 * 1024 * 1024 diskCapacity:20 * 1024 * 1024 diskPath:nil];
     [NSURLCache setSharedURLCache:URLCache];
+    
+    //Add a custom read-only cache path
+    NSString *bundledPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"CustomPathImages"];
+    [[SDImageCache sharedImageCache] addReadOnlyCachePath:bundledPath];
     
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
     [[UINavigationBar appearance]setBarTintColor:[UIColor colorWithRed:104/255.0 green:165/255.0 blue:205/255.0 alpha:1]];

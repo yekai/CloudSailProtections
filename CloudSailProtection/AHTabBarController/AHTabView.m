@@ -18,8 +18,6 @@
 
 @interface AHTabView ()
 
-//The imageview that displays the tab's image
-@property (nonatomic) UIImageView *thumbnail;
 
 //The label that displays the tab's title
 @property (nonatomic) UILabel *titleLabel;
@@ -37,7 +35,7 @@
     [self.titleLabel setTextColor:self.selectedColor];
     [self.titleLabel setFont:[UIFont boldSystemFontOfSize:13.f]];
     if (selected) {
-        self.backgroundColor = [UIColor colorWithRed:187/255.0 green:210/255.0 blue:221/255.0 alpha:1];
+        self.backgroundColor = [UIColor colorWithRed:187/255.0 green:210/255.0 blue:221/255.0 alpha:0.5];
     } else {
         self.backgroundColor = [UIColor colorWithRed:211/255.0 green:229/255.0 blue:235/255.0 alpha:1];
     }
@@ -55,9 +53,9 @@
     
     //Some constants
     CGRect frame = self.frame;
-    static const float kHorizontalSpacing = 2.f;
+    static const float kHorizontalSpacing = 20.f;
     static const float kVerticalSpacing = 1.f;
-    static const float kLabelHeight = 15.f;
+    static const float kLabelHeight = 20.f;
     
     UIColor *tintColor = self.selectedColor;
     

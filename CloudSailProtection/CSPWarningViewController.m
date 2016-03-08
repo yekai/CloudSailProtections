@@ -29,9 +29,14 @@
     [super viewDidLoad];
     
     self.title = @"最新告警";
-    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"关闭" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
+    UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
     UIBarButtonItem *unit = [[UIBarButtonItem alloc]initWithTitle:@"告警统计" style:UIBarButtonItemStylePlain target:self action:@selector(presentWarning:)];
     self.navigationItem.rightBarButtonItems = @[close,unit];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
     [self reloadAlarmWarning];
 }
 
@@ -50,27 +55,24 @@
 //create pull request to get the server alarm history data
 - (void)reloadAlarmWarning
 {
-    if (!_warningArray)
-    {
-        _warningArray = [NSMutableArray array];
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        __block NSMutableArray *weakWaringArray = _warningArray;
-        __block CSPWarningViewController *weakSelf = self;
-        
-        [Post getAlarmsWithBlock:^(NSArray *alarmsArray) {
-            [alarmsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                Alarm *alarm = [[Alarm alloc]initWithAlarmAttributes:obj];
-                [weakWaringArray addObject:alarm];
-            }];
-            
-            [weakSelf.tableView reloadData];
-            [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
-        }
-                 andFailureBlock:^{
-            CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-            [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    _warningArray = [NSMutableArray array];
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    __block NSMutableArray *weakWaringArray = _warningArray;
+    __block CSPWarningViewController *weakSelf = self;
+    
+    [Post getAlarmsWithBlock:^(NSArray *alarmsArray) {
+        [alarmsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            Alarm *alarm = [[Alarm alloc]initWithAlarmAttributes:obj];
+            [weakWaringArray addObject:alarm];
         }];
+        
+        [weakSelf.tableView reloadData];
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
     }
+             andFailureBlock:^{
+        CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
+        [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
