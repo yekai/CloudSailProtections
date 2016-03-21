@@ -12,4 +12,5 @@
 
 
 - (void)displayHomeViewWithTabIndex:(NSInteger)index;
+- (void)displayHomeViewWithIndex:(NSNumber *)index;
 @end

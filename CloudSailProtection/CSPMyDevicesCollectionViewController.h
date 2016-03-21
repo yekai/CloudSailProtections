@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TabsBarBaseViewController.h"
+@class DeviceTypeCategory;
 @interface CSPMyDevicesCollectionViewController : TabsBarBaseViewController
-
+@property (nonatomic, strong) DeviceTypeCategory *deviceObj;
 @end

@@ -35,7 +35,7 @@
     [self.titleLabel setTextColor:self.selectedColor];
     [self.titleLabel setFont:[UIFont boldSystemFontOfSize:13.f]];
     if (selected) {
-        self.backgroundColor = [UIColor colorWithRed:187/255.0 green:210/255.0 blue:221/255.0 alpha:0.5];
+        self.backgroundColor = [UIColor colorWithRed:171/255.0 green:218/255.0 blue:243/255.0 alpha:1];
     } else {
         self.backgroundColor = [UIColor colorWithRed:211/255.0 green:229/255.0 blue:235/255.0 alpha:1];
     }

@@ -45,7 +45,7 @@
         NSDictionary *home = @{@"title":@"首页",@"identifier":@"CSPTransitionsViewController",@"isLoginRequired":@YES,@"nodeImage":[UIImage imageNamed:@"grsz"]};
         NSDictionary *personalSetting = @{@"title":@"个人设置",@"identifier":@"PersonalSettingViewController",@"isLoginRequired":@YES,@"nodeImage":[UIImage imageNamed:@"grsz"]};
         NSDictionary *notices = @{@"title":@"公告信息",@"identifier":@"CSPNoticesViewController",@"isLoginRequired":@YES,@"nodeImage":[UIImage imageNamed:@"ggxx"]};
-        NSDictionary *myEquipment = @{@"title":@"我的设备",@"identifier":@"CSPMyDevicesCollectionViewController",@"isLoginRequired":@NO,@"nodeImage":[UIImage imageNamed:@"wdsb"]};
+        NSDictionary *myEquipment = @{@"title":@"设备类别",@"identifier":@"CSPDeviceTypeCategoryViewController",@"isLoginRequired":@NO,@"nodeImage":[UIImage imageNamed:@"wdsb"]};
         NSDictionary *communications = @{@"title":@"联系方式",@"identifier":@"ContactsTableViewController",@"isLoginRequired":@NO,@"nodeImage":[UIImage imageNamed:@"lxfs"]};
         NSDictionary *contracts = @{@"title":@"合同信息",@"identifier":@"CSPContractViewController",@"isLoginRequired":@NO,@"nodeImage":[UIImage imageNamed:@"htxx"]};
         NSDictionary *about = @{@"title":@"关于",@"identifier":@"CSPAboutViewController",@"isLoginRequired":@NO,@"nodeImage":[UIImage imageNamed:@"about"]};

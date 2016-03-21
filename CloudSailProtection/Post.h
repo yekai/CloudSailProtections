@@ -46,4 +46,9 @@
 + (NSURLSessionDataTask *)getAlarmNumberByTimeWithBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getFaultNumByTimeWithType:(NSString *)type successBlock:(void (^)(NSArray *routinsArray))block andFailureBlock:(void (^)())fblock;
 
++ (NSURLSessionDataTask *)getDeviceType1WithBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock;
+
++ (NSURLSessionDataTask *)getDeviceType2WithType1:(NSString *)typeId  count:(NSString *)count successBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock;
+
++ (NSURLSessionDataTask *)getAssetInfosWithAssetTypeId:(NSString *)typeId assetCount:(NSString*)count successBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock;
 @end

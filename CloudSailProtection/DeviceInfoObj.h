@@ -10,12 +10,11 @@
 
 @interface DeviceInfoObj : NSObject
 
-@property (nonatomic, copy) NSString *deviceName;
-@property (nonatomic, copy) NSString *deviceId;
-@property (nonatomic, copy) NSString *alarmNum;
-@property (nonatomic, copy) NSString *assetTypeCode;
-@property (nonatomic, copy) NSString *url;
+@property (nonatomic, copy) NSString *assetName;
+@property (nonatomic, copy) NSString *assetTypeName;
+@property (nonatomic, copy) NSString *locationName;
+@property (nonatomic, copy) NSString *alarmCount;
+@property (nonatomic, copy) NSString *assetId;
 
 - (instancetype)initWithDeviceAttribute:(NSDictionary *)device;
-- (NSString *)getImageName;
 @end

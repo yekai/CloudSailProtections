@@ -10,11 +10,13 @@
 #import "MyDeviceCollectionViewCell.h"
 #import "CSPGlobalViewControlManager.h"
 #import "Post.h"
-#import "DeviceInfoObj.h"
+#import "DeviceAssets.h"
 #import "MBProgressHUD.h"
 #import "CloudUtility.h"
 #import "CSPLoginViewController.h"
 #import "UIStoryBoard+New.h"
+#import "DeviceTypeCategory.h"
+#import "CSPAssetsInfoDetailViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 
@@ -32,8 +34,6 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
     
     [self reloadDeviceInfos];
     self.title = @"我的设备";
-    
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"navigationDummy"] style:UIBarButtonItemStylePlain target:self action:@selector(toggleMenu)];
 }
 
 //create pull request to load related device info for customer
@@ -46,9 +46,11 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
         _devicesArray = [NSMutableArray array];
         
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [Post getDeviceInfoWithBlock:^(NSArray *deviceInfoArray) {
+        [Post getDeviceType2WithType1:self.deviceObj.typeId
+                                count:self.deviceObj.typeCount
+                         successBlock:^(NSArray *deviceInfoArray) {
             [deviceInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                DeviceInfoObj *deviceObj = [[DeviceInfoObj alloc]initWithDeviceAttribute:obj];
+                DeviceAssets *deviceObj = [[DeviceAssets alloc]initWithDeviceAssetsDict:obj];
                 [weakSelf.devicesArray addObject:deviceObj];
             }];
             //display the related device collection items
@@ -81,11 +83,6 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
     return [[CSPGlobalViewControlManager sharedManager]rootCotrol];
 }
 
-- (void)toggleMenu
-{
-    [[[CSPGlobalViewControlManager sharedManager]rootCotrol] anchorTopViewToRightAnimated:YES];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -106,48 +103,55 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MyDeviceCollectionViewCell *cell = (MyDeviceCollectionViewCell*)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    DeviceInfoObj *deviceObj = (DeviceInfoObj*)(self.devicesArray[indexPath.row]);
+    DeviceAssets *deviceObj = (DeviceAssets*)(self.devicesArray[indexPath.row]);
     NSString *imageName = [deviceObj getImageName];
     [cell.image sd_setImageWithURL:[NSURL URLWithString:[deviceObj url]]
                   placeholderImage:[UIImage imageNamed:imageName] options:0];
+    cell.deviceName.text = [NSString stringWithFormat:@"%@(%@)",deviceObj.assetName, deviceObj.deviceCount];
     // Configure the cell
     
     return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    DeviceAssets *deviceObj = (DeviceAssets*)(self.devicesArray[indexPath.row]);
+    
+    if ([deviceObj.deviceCount floatValue] == 0)
+    {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"注意" message:@"该设备数目为0." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:okAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return;
+    }
+
+    
+    CSPAssetsInfoDetailViewController *myDevice = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass(CSPAssetsInfoDetailViewController.class)];
+    myDevice.assets = deviceObj;
+    [self.navigationController pushViewController:myDevice animated:YES];
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
     return [CloudUtility isIphone6S] ? 50 : 30;
 }
 
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
+- (void)displayHomeViewWithTabIndex:(NSInteger)index
+{
+    TabsBarBaseViewController __weak *weakSelf = self.navigationController.viewControllers[0];
+    [self.navigationController popViewControllerAnimated:NO];
+    [self displayHomeWithIndex:@(index) andTabViewControl:weakSelf];
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
+- (void)displayHomeWithIndex:(NSNumber*)index andTabViewControl:(TabsBarBaseViewController*)tabView
+{
+    __weak NSNumber *numberIndex = index;
+    [[[CSPGlobalViewControlManager sharedManager]rootCotrol] anchorTopViewToRightAnimated:NO onComplete:^{
+        [tabView performSelector:@selector(displayHomeViewWithIndex:) withObject:numberIndex afterDelay:0.5];
+    }];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
-}
-*/
 
 @end

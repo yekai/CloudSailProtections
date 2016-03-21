@@ -823,4 +823,122 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 }
             }];
 }
+
++ (NSURLSessionDataTask *)getDeviceType1WithBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock
+{
+    NSString *userId = [[SessionManager sharedManager].user loginId];
+    NSString *token = [[SessionManager sharedManager]token];
+    NSString *password = [[SessionManager sharedManager].user password];
+    
+    NSString *requestPath = [NSString stringWithFormat:@"cloud/GetDeviceType1/%@/%@/%@/1/10",userId,password,token];
+    requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
+    return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
+                                         parameters:nil
+                                            success:^(NSURLSessionDataTask * __unused task, id JSON){
+                                                
+                                            }
+                                            failure:^(NSURLSessionDataTask *__unused task, NSError *error)
+            {
+                NSData *loginResponse = [error userInfo][kCloudRequestParseKey];
+                BOOL isSuccess = YES;
+                NSError *parseError = nil;
+                
+                id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
+                
+                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                {
+                    NSLog(@"json parse failure");
+                    isSuccess = NO;
+                }
+                
+                
+                if (block && jsonObj)
+                {
+                    block(jsonObj[@"devicetypes"]);
+                }
+                if (!isSuccess)
+                {
+                    fblock();
+                }
+            }];
+}
+
++ (NSURLSessionDataTask *)getDeviceType2WithType1:(NSString *)typeId count:(NSString *)count successBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock
+{
+    NSString *userId = [[SessionManager sharedManager].user loginId];
+    NSString *token = [[SessionManager sharedManager]token];
+    NSString *password = [[SessionManager sharedManager].user password];
+    
+    NSString *requestPath = [NSString stringWithFormat:@"cloud/GetDeviceType2/%@/%@/%@/%@/1/%@",typeId, userId,password,token,count];
+    requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
+    return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
+                                         parameters:nil
+                                            success:^(NSURLSessionDataTask * __unused task, id JSON){
+                                                
+                                            }
+                                            failure:^(NSURLSessionDataTask *__unused task, NSError *error)
+            {
+                NSData *loginResponse = [error userInfo][kCloudRequestParseKey];
+                BOOL isSuccess = YES;
+                NSError *parseError = nil;
+                
+                id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
+                
+                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                {
+                    NSLog(@"json parse failure");
+                    isSuccess = NO;
+                }
+                
+                
+                if (block && jsonObj)
+                {
+                    block(jsonObj[@"devicetypes"]);
+                }
+                if (!isSuccess)
+                {
+                    fblock();
+                }
+            }];
+}
+
+
++ (NSURLSessionDataTask *)getAssetInfosWithAssetTypeId:(NSString *)typeId assetCount:(NSString*)count successBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock
+{
+    NSString *userId = [[SessionManager sharedManager].user loginId];
+    NSString *token = [[SessionManager sharedManager]token];
+    NSString *password = [[SessionManager sharedManager].user password];
+    
+    NSString *requestPath = [NSString stringWithFormat:@"cloud/GetAssetInfos/%@/%@/%@/%@/1/%@", userId,password,token,typeId,count];
+    requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
+    return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
+                                         parameters:nil
+                                            success:^(NSURLSessionDataTask * __unused task, id JSON){
+                                                
+                                            }
+                                            failure:^(NSURLSessionDataTask *__unused task, NSError *error)
+            {
+                NSData *loginResponse = [error userInfo][kCloudRequestParseKey];
+                BOOL isSuccess = YES;
+                NSError *parseError = nil;
+                
+                id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
+                
+                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                {
+                    NSLog(@"json parse failure");
+                    isSuccess = NO;
+                }
+                
+                
+                if (block && jsonObj)
+                {
+                    block(jsonObj[@"assetInfos"]);
+                }
+                if (!isSuccess)
+                {
+                    fblock();
+                }
+            }];
+}
 @end

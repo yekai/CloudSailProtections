@@ -127,6 +127,12 @@
 		4DC4B3991BFA51C400ED3AEF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DC4B3981BFA51C400ED3AEF /* Foundation.framework */; };
 		4DF123C51C4290760018A098 /* PNCloudeBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DF123C41C4290760018A098 /* PNCloudeBarChart.m */; };
 		4DF123CA1C42A4800018A098 /* PNCloudBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DF123C91C42A4800018A098 /* PNCloudBar.m */; };
+		4DF60BED1CA036C200C9E982 /* CSPAssetsInfoDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DF60BEC1CA036C200C9E982 /* CSPAssetsInfoDetailViewController.m */; };
+		4DF60BF21CA03C4000C9E982 /* DeviceAssetsInfoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DF60BF11CA03C4000C9E982 /* DeviceAssetsInfoTableViewCell.m */; };
+		4DFA4EE21C9EE2C1008507D1 /* DeviceTypeCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFA4EE11C9EE2C1008507D1 /* DeviceTypeCategory.m */; };
+		4DFA4EE51C9EE561008507D1 /* DeviceAssets.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFA4EE41C9EE561008507D1 /* DeviceAssets.m */; };
+		4DFA4EE81C9EEA41008507D1 /* CSPDeviceTypeCategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFA4EE71C9EEA41008507D1 /* CSPDeviceTypeCategoryViewController.m */; };
+		4DFA4EEB1C9EEE47008507D1 /* DeviceCategoryCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFA4EEA1C9EEE47008507D1 /* DeviceCategoryCollectionViewCell.m */; };
 		4DFDD47A1C1D71DF000AA616 /* CSPNoticesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFDD4791C1D71DF000AA616 /* CSPNoticesViewController.m */; };
 		4DFDD47F1C1D7443000AA616 /* NoticesTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DFDD47E1C1D7443000AA616 /* NoticesTableViewCell.m */; };
 /* End PBXBuildFile section */
@@ -411,6 +417,18 @@
 		4DF123C41C4290760018A098 /* PNCloudeBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PNCloudeBarChart.m; path = PNChart/PNCloudeBarChart.m; sourceTree = "<group>"; };
 		4DF123C81C42A4800018A098 /* PNCloudBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PNCloudBar.h; path = PNChart/PNCloudBar.h; sourceTree = "<group>"; };
 		4DF123C91C42A4800018A098 /* PNCloudBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PNCloudBar.m; path = PNChart/PNCloudBar.m; sourceTree = "<group>"; };
+		4DF60BEB1CA036C200C9E982 /* CSPAssetsInfoDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPAssetsInfoDetailViewController.h; sourceTree = "<group>"; };
+		4DF60BEC1CA036C200C9E982 /* CSPAssetsInfoDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPAssetsInfoDetailViewController.m; sourceTree = "<group>"; };
+		4DF60BF01CA03C4000C9E982 /* DeviceAssetsInfoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceAssetsInfoTableViewCell.h; sourceTree = "<group>"; };
+		4DF60BF11CA03C4000C9E982 /* DeviceAssetsInfoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceAssetsInfoTableViewCell.m; sourceTree = "<group>"; };
+		4DFA4EE01C9EE2C0008507D1 /* DeviceTypeCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceTypeCategory.h; sourceTree = "<group>"; };
+		4DFA4EE11C9EE2C1008507D1 /* DeviceTypeCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceTypeCategory.m; sourceTree = "<group>"; };
+		4DFA4EE31C9EE561008507D1 /* DeviceAssets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceAssets.h; sourceTree = "<group>"; };
+		4DFA4EE41C9EE561008507D1 /* DeviceAssets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceAssets.m; sourceTree = "<group>"; };
+		4DFA4EE61C9EEA41008507D1 /* CSPDeviceTypeCategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPDeviceTypeCategoryViewController.h; sourceTree = "<group>"; };
+		4DFA4EE71C9EEA41008507D1 /* CSPDeviceTypeCategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPDeviceTypeCategoryViewController.m; sourceTree = "<group>"; };
+		4DFA4EE91C9EEE47008507D1 /* DeviceCategoryCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceCategoryCollectionViewCell.h; sourceTree = "<group>"; };
+		4DFA4EEA1C9EEE47008507D1 /* DeviceCategoryCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceCategoryCollectionViewCell.m; sourceTree = "<group>"; };
 		4DFDD4781C1D71DF000AA616 /* CSPNoticesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSPNoticesViewController.h; sourceTree = "<group>"; };
 		4DFDD4791C1D71DF000AA616 /* CSPNoticesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSPNoticesViewController.m; sourceTree = "<group>"; };
 		4DFDD47D1C1D7443000AA616 /* NoticesTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticesTableViewCell.h; sourceTree = "<group>"; };
@@ -619,6 +637,8 @@
 		4DC4B31D1BF61BAB00ED3AEF /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				4D8EFD691C2D7E9400895A66 /* DeviceInfoObj.h */,
+				4D8EFD6A1C2D7E9400895A66 /* DeviceInfoObj.m */,
 				4DC4B3381BF63D9900ED3AEF /* Post.h */,
 				4DC4B3391BF63D9900ED3AEF /* Post.m */,
 				4DC4B33A1BF63D9900ED3AEF /* User.h */,
@@ -658,6 +678,10 @@
 				4D8EFD6D1C2D8C3D00895A66 /* Agreements.m */,
 				4DAD9E131C394AE900F400D3 /* RoutingObj.h */,
 				4DAD9E141C394AE900F400D3 /* RoutingObj.m */,
+				4DFA4EE01C9EE2C0008507D1 /* DeviceTypeCategory.h */,
+				4DFA4EE11C9EE2C1008507D1 /* DeviceTypeCategory.m */,
+				4DFA4EE31C9EE561008507D1 /* DeviceAssets.h */,
+				4DFA4EE41C9EE561008507D1 /* DeviceAssets.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -685,8 +709,6 @@
 				4DFDD47E1C1D7443000AA616 /* NoticesTableViewCell.m */,
 				4D8EFD4E1C26EB7D00895A66 /* PersonalSettingsTableViewCell.h */,
 				4D8EFD4F1C26EB7D00895A66 /* PersonalSettingsTableViewCell.m */,
-				4D8EFD691C2D7E9400895A66 /* DeviceInfoObj.h */,
-				4D8EFD6A1C2D7E9400895A66 /* DeviceInfoObj.m */,
 				4D8EFD711C2EF26200895A66 /* HealthyCircleChartView.h */,
 				4D8EFD721C2EF26200895A66 /* HealthyCircleChartView.m */,
 				4DAD9E0A1C3920D700F400D3 /* RoutingsTableViewCell.h */,
@@ -697,6 +719,10 @@
 				4DAD9E111C39257700F400D3 /* RightBottomBorderLabel.m */,
 				4DAD9E161C39542500F400D3 /* RoutingTableCellShowData.h */,
 				4DAD9E171C39542500F400D3 /* RoutingTableCellShowData.m */,
+				4DFA4EE91C9EEE47008507D1 /* DeviceCategoryCollectionViewCell.h */,
+				4DFA4EEA1C9EEE47008507D1 /* DeviceCategoryCollectionViewCell.m */,
+				4DF60BF01CA03C4000C9E982 /* DeviceAssetsInfoTableViewCell.h */,
+				4DF60BF11CA03C4000C9E982 /* DeviceAssetsInfoTableViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -744,6 +770,10 @@
 				4DAD9E061C38347300F400D3 /* CSPRoutingViewController.m */,
 				4D34BBB01C89DF920011F1B3 /* TabsBarBaseViewController.h */,
 				4D34BBB11C89DF920011F1B3 /* TabsBarBaseViewController.m */,
+				4DFA4EE61C9EEA41008507D1 /* CSPDeviceTypeCategoryViewController.h */,
+				4DFA4EE71C9EEA41008507D1 /* CSPDeviceTypeCategoryViewController.m */,
+				4DF60BEB1CA036C200C9E982 /* CSPAssetsInfoDetailViewController.h */,
+				4DF60BEC1CA036C200C9E982 /* CSPAssetsInfoDetailViewController.m */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -1059,6 +1089,7 @@
 				4D13F25A1BFF626900937365 /* UIImage+Overlay.m in Sources */,
 				4DC4B3331BF62B6800ED3AEF /* MEZoomAnimationController.m in Sources */,
 				4D17996D1C0DF93E00BFD8F4 /* ContactsTableViewCell.m in Sources */,
+				4DFA4EEB1C9EEE47008507D1 /* DeviceCategoryCollectionViewCell.m in Sources */,
 				4D13F2831BFF67C500937365 /* PNBarChart.m in Sources */,
 				4DC4B3231BF61DD300ED3AEF /* CSPMenuViewController.m in Sources */,
 				4D17994F1C08A59200BFD8F4 /* UIImage+TBasicTools.m in Sources */,
@@ -1093,8 +1124,12 @@
 				4D1799251C08A53D00BFD8F4 /* GTMBase64.m in Sources */,
 				4DC4B34A1BF6DDCE00ED3AEF /* CSPBreakdownsViewController.m in Sources */,
 				4DAD9E181C39542500F400D3 /* RoutingTableCellShowData.m in Sources */,
+				4DFA4EE51C9EE561008507D1 /* DeviceAssets.m in Sources */,
 				4DC4B3781BFA4F7500ED3AEF /* PNChartLabel.m in Sources */,
+				4DF60BF21CA03C4000C9E982 /* DeviceAssetsInfoTableViewCell.m in Sources */,
+				4DFA4EE21C9EE2C1008507D1 /* DeviceTypeCategory.m in Sources */,
 				4D8EFD621C2D555800895A66 /* PUEObj.m in Sources */,
+				4DF60BED1CA036C200C9E982 /* CSPAssetsInfoDetailViewController.m in Sources */,
 				4DFDD47A1C1D71DF000AA616 /* CSPNoticesViewController.m in Sources */,
 				4D1799761C0F4E2D00BFD8F4 /* CSPWarningViewController.m in Sources */,
 				4DC4B3501BF6E56D00ED3AEF /* MenuNode.m in Sources */,
@@ -1106,6 +1141,7 @@
 				4D13F2841BFF67C500937365 /* PNCircleChart.m in Sources */,
 				4D1799731C0EA0EA00BFD8F4 /* CSPPUETrendGraphViewController.m in Sources */,
 				4D13F2731BFF66A100937365 /* PNLineChartData.m in Sources */,
+				4DFA4EE81C9EEA41008507D1 /* CSPDeviceTypeCategoryViewController.m in Sources */,
 				4DC4B3291BF629EB00ED3AEF /* CSPTransitionsViewController.m in Sources */,
 				4D17994E1C08A59200BFD8F4 /* UIColor+Expand.m in Sources */,
 				4D1799511C08A59200BFD8F4 /* UIView+ChangePartFrame.m in Sources */,

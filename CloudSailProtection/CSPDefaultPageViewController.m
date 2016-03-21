@@ -305,7 +305,7 @@
 
     [self.mainAttributes.faultInfos enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [numbers addObject:@([obj[@"count"] integerValue])];
-        [xStatus addObject:obj[@"statusName"]];
+        [xStatus addObject:obj[@"statusName"] ];
         [backColors addObject:blueColor];
     }];
     
@@ -325,7 +325,7 @@
         return [barChartFormatter stringFromNumber:[NSNumber numberWithFloat:yValue]];
     };
     
-    self.trackBarChart.labelFont = [UIFont systemFontOfSize:13];
+    self.trackBarChart.labelFont = [UIFont systemFontOfSize:9];
     self.trackBarChart.yChartLabelWidth = 20.0;
     self.trackBarChart.chartMarginLeft = 10.0;
     self.trackBarChart.chartMarginRight = 10.0;
