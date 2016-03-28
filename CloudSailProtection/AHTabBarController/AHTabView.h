@@ -11,7 +11,8 @@
 @class AHSubitemView;
 
 @interface AHTabView : UIView
-
+//Indicates whether the tab is currently selected or not
+@property (nonatomic, getter=isSelected) BOOL selected;
 
 /**
  Contains AHSubitemView instances that will be showed wehenever this tab is tapped. If the tab only contains one item, no extra menu will be shown and the user will directly see the subitem's viewcontroller.
@@ -50,5 +51,7 @@
  Animate to a selected/deselected state.
  */
 -(void)setSelected:(BOOL)selected;
+
+- (BOOL)isSelected;
 
 @end

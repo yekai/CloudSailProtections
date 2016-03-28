@@ -281,8 +281,8 @@
     CGFloat distanceFromCenter = sqrtf(powf((touchLocation.y - circleCenter.y),2) + powf((touchLocation.x - circleCenter.x),2));
     
     if (distanceFromCenter < _innerCircleRadius) {
-        if ([self.delegate respondsToSelector:@selector(didUnselectPieItem)]) {
-            [self.delegate didUnselectPieItem];
+        if ([self.delegate respondsToSelector:@selector(didUnselectPieItemWithLineChart:)]) {
+            [self.delegate didUnselectPieItemWithLineChart:self];
         }
         [self.sectorHighlight removeFromSuperlayer];
         return;
@@ -294,8 +294,8 @@
         index ++;
     }
     
-    if ([self.delegate respondsToSelector:@selector(userClickedOnPieIndexItem:)]) {
-        [self.delegate userClickedOnPieIndexItem:index];
+    if ([self.delegate respondsToSelector:@selector(userClickedOnPieIndexItem:lineChart:)]) {
+        [self.delegate userClickedOnPieIndexItem:index lineChart:self];
     }
     
     if (self.shouldHighlightSectorOnTouch)

@@ -33,6 +33,12 @@
     self.navigationItem.rightBarButtonItems = @[close,unit];
 }
 
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];

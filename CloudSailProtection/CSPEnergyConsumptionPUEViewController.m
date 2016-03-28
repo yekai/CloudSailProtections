@@ -20,6 +20,9 @@
 @property (weak, nonatomic) IBOutlet WMGaugeView *gaugeView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *gaugeViewHeightConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UILabel *itConsumption;
+@property (weak, nonatomic) IBOutlet UILabel *totalConsumption;
+@property (weak, nonatomic) IBOutlet UIView *itTotalConsumptionSuperView;
 
 @end
 
@@ -35,6 +38,7 @@
     
     self.navigationItem.rightBarButtonItems = @[close];
     
+    self.itTotalConsumptionSuperView.layer.cornerRadius = 10.0;
     [self createGaugeViewWithPUEData];
 }
 
@@ -49,8 +53,12 @@
     __block CSPEnergyConsumptionPUEViewController *weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-    [Post getPUEDataWithBlock:^(CGFloat pueData) {
-        [weakSelf setGaugeViewValue:@(pueData)];
+    [Post getPUEDataWithBlock:^(NSDictionary *pueData) {
+        NSNumber *pueValue = @([pueData[@"puevalue"] floatValue]);
+        NSString *itEnergy = [NSString stringWithFormat:@"%.0f", [pueData[@"itEnergy"] floatValue]];
+        NSString *totalEnergy = [NSString stringWithFormat:@"%.0f", [pueData[@"totalEnergy"] floatValue]];
+        [weakSelf setGaugeViewValue:pueValue];
+        [weakSelf setItEnergyValue:itEnergy andTotalEnergyValue:totalEnergy];
         [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
     } andFailureBlock:^{
         CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
@@ -61,6 +69,7 @@
 
 - (void)createGaugeViewWithPUEData
 {
+    self.itTotalConsumptionSuperView.hidden = YES;
     self.gaugeViewHeightConstraint.constant = [CloudUtility isIphone6S] ? 300 : 260;
     
     _gaugeView.style = [WMGaugeViewStyle3D new];
@@ -70,7 +79,7 @@
     _gaugeView.rangeValues = @[@1,@2,@3.0,@4.0];
     _gaugeView.rangeColors = @[RGB(27, 202, 33),RGB(232, 231, 33),RGB(232, 111, 33),RGB(231, 32, 43)];
     _gaugeView.rangeLabels = @[@"低",@"正常",@"高",@"很高"];
-    _gaugeView.unitOfMeasurement = [NSString stringWithFormat:@"园区PUE:%.3f",0.00] ;
+    _gaugeView.unitOfMeasurement = [NSString stringWithFormat:@"实时PUE:%.1f",0.00] ;
     _gaugeView.unitOfMeasurementColor = [UIColor blackColor];
     _gaugeView.showUnitOfMeasurement = YES;
     _gaugeView.showInnerBackground = NO;
@@ -97,7 +106,14 @@
 - (void)setGaugeViewValue:(NSNumber *)number
 {
     _gaugeView.value = [number floatValue];
-    _gaugeView.unitOfMeasurement = [NSString stringWithFormat:@"园区PUE:%.3f",[number floatValue]];
+    _gaugeView.unitOfMeasurement = [NSString stringWithFormat:@"实时PUE:%.1f",[number floatValue]];
+}
+
+- (void)setItEnergyValue:(NSString *)itEnergy andTotalEnergyValue:(NSString *)totalEnergy
+{
+    self.itTotalConsumptionSuperView.hidden = NO;
+    self.itConsumption.text = [NSString stringWithFormat:@"IT能耗:%@", itEnergy];
+    self.totalConsumption.text = [NSString stringWithFormat:@"总能耗:%@", totalEnergy];
 }
 
 - (void)viewDidAppear:(BOOL)animated

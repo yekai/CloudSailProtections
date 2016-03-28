@@ -11,10 +11,9 @@
 @interface RoutingObj : NSObject
 
 @property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *routingId;
+@property (nonatomic, assign) NSInteger routingStatus;
 @property (nonatomic, copy) NSString *routingName;
 @property (nonatomic, copy) NSString *routingValue;
-@property (nonatomic, copy) NSString *time;
 
 - (instancetype)initWithRoutingAttributes:(NSDictionary *)dict;
 @end

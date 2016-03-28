@@ -15,11 +15,10 @@
 {
     if (self = [super init])
     {
-        self.name = dict[@"name"] != [NSNull null] ? dict[@"name"] : @" ";
-        self.routingId = dict[@"routingId"] != [NSNull null] ? dict[@"routingId"] : @" ";
+        self.name = dict[@"deviceName"] != [NSNull null] ? dict[@"deviceName"] : @" ";
+        self.routingStatus = dict[@"routingStatus"] != [NSNull null] ? [dict[@"routingStatus"] integerValue] : -9;
         self.routingName = dict[@"routingName"] != [NSNull null] ? dict[@"routingName"] : @" ";
         self.routingValue = dict[@"routingValue"] != [NSNull null] ? dict[@"routingValue"] : @" ";
-        self.time = dict[@"time"] != [NSNull null] ?  dict[@"time"] : @" ";
     }
     
     return self;

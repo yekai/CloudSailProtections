@@ -24,10 +24,10 @@
 
 - (void)setValueFromPueObj:(PUEObj *)pue
 {
-    self.date.text = [CloudUtility isNullString: pue.time].length > 10 ? [pue.time substringToIndex:10] : @"";
-    self.pue.text = [CloudUtility isNullString: pue.value];
-    self.totalEnergyConsumption.text = [CloudUtility isNullString: pue.value];
-    self.ITEC.text = [CloudUtility isNullString: pue.value];
+    self.date.text = [CloudUtility isNullString: pue.time].length > 10 ? [pue.time substringToIndex:10] : pue.time;
+    self.pue.text = [CloudUtility isNullString: pue.pue];
+    self.totalEnergyConsumption.text = [CloudUtility isNullString: pue.totalEnergy];
+    self.ITEC.text = [CloudUtility isNullString: pue.itEnergy];
 }
 
 @end

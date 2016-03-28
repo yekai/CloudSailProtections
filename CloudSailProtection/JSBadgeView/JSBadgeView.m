@@ -162,8 +162,12 @@ static BOOL JSBadgeViewIsUIKitFlatMode(void)
             newFrame.origin.x = -viewWidth / 2.0f;
             newFrame.origin.y = -viewHeight / 2.0f;
             break;
+        case JSBadgeViewAlignmentTopRightInside:
+            newFrame.origin.x = superviewWidth - viewWidth;
+            newFrame.origin.y = 0;
+            break;
         case JSBadgeViewAlignmentTopRight:
-            newFrame.origin.x = superviewWidth - (viewWidth / 2.0f);
+            newFrame.origin.x = superviewWidth - viewWidth/2;
             newFrame.origin.y = -viewHeight / 2.0f;
             break;
         case JSBadgeViewAlignmentTopCenter:

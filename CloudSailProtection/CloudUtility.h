@@ -15,5 +15,8 @@
 + (NSString *)stringFromDate:(NSDate *)date;
 + (BOOL)isIphone6S;
 + (NSString *)isNullString:(NSString *)string;
++ (NSString *)stringFromMonth;
++ (NSString *)stringFromYear;
++ (NSString *)stringForRoutingDateWithRoutingTime:(NSString *)intervalTime;
 @end
 

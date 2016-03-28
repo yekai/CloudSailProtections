@@ -117,9 +117,9 @@
     NSString *labelText;
     if (_yLabels) {
       float yAsixValue = [_yLabels[_yLabels.count - i - 1] floatValue];
-      labelText= _yLabelFormatter(yAsixValue);
+      labelText= [NSString stringWithFormat:@"%.0f", (yAsixValue)];
     } else {
-      labelText = _yLabelFormatter((float)_yValueMax * ( (_yLabelSum - i) / (float)_yLabelSum ));
+      labelText= [NSString stringWithFormat:@"%.0f", (float)_yValueMax * ( (_yLabelSum - i) / (float)_yLabelSum )];
     }
 
     PNChartLabel *label = [[PNChartLabel alloc] initWithFrame:CGRectZero];
@@ -437,8 +437,8 @@
     CGPoint touchPoint = [touch locationInView:self];
     UIView *subview = [self hitTest:touchPoint withEvent:nil];
 
-    if ([subview isKindOfClass:[PNCloudBar class]] && [self.delegate respondsToSelector:@selector(userClickedOnBarAtIndex:)]) {
-        [self.delegate userClickedOnBarAtIndex:subview.tag];
+    if ([subview isKindOfClass:[PNCloudBar class]] && [self.delegate respondsToSelector:@selector(userClickedOnBarAtIndex:lineChart:)]) {
+        [self.delegate userClickedOnBarAtIndex:subview.tag lineChart:self];
     }
 }
 

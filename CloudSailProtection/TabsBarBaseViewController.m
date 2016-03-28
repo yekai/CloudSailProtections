@@ -12,6 +12,7 @@
 #import "CSPGlobalViewControlManager.h"
 #import "CSPMenuViewController.h"
 #import "CSPTransitionsViewController.h"
+#import "JSBadgeView.h"
 
 @interface TabsBarBaseViewController ()
 
@@ -78,6 +79,7 @@
     [self.separator setBackgroundColor:[UIColor colorWithWhite:.7f alpha:1.f]];
     [self.tabBar addSubview:self.separator];
     
+    
     //Create and add each tab to the tabBar
     for (int i = 0; i < self.tabs.count; i++) {
         CGRect tabFrame = CGRectMake(i*tabwidth, 0.f, tabwidth, self.tabBarHeight.floatValue);
@@ -89,6 +91,33 @@
             [weakself didSelectTab:tab];
         }];
         [self.tabBar addSubview:tabView];
+    }
+    
+    [self performSelector:@selector(addStatesForTabBar) withObject:nil afterDelay:0.2];
+}
+
+- (void)addStatesForTabBar
+{
+    NSArray *statesArray = [[[CSPGlobalViewControlManager sharedManager]getDefaultPageControl]tabBarStatesForCurrentApps];
+    
+    //Create and add each tab to the tabBar
+    for (int i = 0; i < self.tabs.count; i++)
+    {
+        AHTabView *tabView = self.tabs[i];
+        if (i == 1 || i == 2)
+        {
+            if (![statesArray[i-1] isEqualToString:@"-1"])
+            {
+                JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:tabView.thumbnail alignment:JSBadgeViewAlignmentTopRight];
+                badgeView.badgeText = statesArray[i-1];
+            }
+        }
+        
+        if ([statesArray[2] integerValue] == i)
+        {
+            [tabView setSelected:YES];
+        }
+        
     }
 }
 

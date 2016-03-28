@@ -11,4 +11,7 @@
 @interface DeviceCategoryCollectionViewCell : UICollectionViewCell
 @property (nonatomic, weak) IBOutlet UIImageView *image;
 @property (nonatomic, weak) IBOutlet UILabel     *categoryName;
+
+- (void)configureCellWithBadgeNumber:(NSString *)badge;
+- (void)hideBadge;
 @end

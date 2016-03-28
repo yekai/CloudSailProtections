@@ -48,15 +48,14 @@
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *healthyBackBottomConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *healthyWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *warningChartWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *trackChartWidthConstraint;
+
 //alarm and breakdown button to display the data
 @property (weak, nonatomic) IBOutlet UIButton *alarmCountBtn;
 @property (weak, nonatomic) IBOutlet UIButton *trackCountBtn;
-//healthy chart beat persons
-@property (weak, nonatomic) IBOutlet UILabel *beatNumberLabel;
 
-@property (nonatomic) NSInteger defaultBadge;
-@property (nonatomic) NSInteger warningBadge;
-@property (nonatomic) NSInteger breakdownBadge;
+
 @end
 
 @implementation CSPDefaultPageViewController
@@ -91,7 +90,8 @@
     //display the number with ease in out animation kind
     _countingLabel.method = UILabelCountingMethodEaseInOut;
 
-    self.healthyWidthConstraint.constant = self.view.bounds.size.width - 20;
+    CGFloat width = self.view.bounds.size.width - 20;
+    self.healthyWidthConstraint.constant = width;
     
     //create healthy circle chart
     NSUInteger circleWH = [CloudUtility isIphone6S] ? 230 : 200;
@@ -99,6 +99,10 @@
     self.circleChart = [HealthyCircleChartView loadCircleViewFromNibWithFrame:CGRectMake(originX, 10, circleWH, circleWH)];
     
     [self.healthyBackView insertSubview:self.circleChart atIndex:1];
+    
+    CGFloat warningTrackChartBackViewWith = (width - 10)/2;
+    self.warningChartWidthConstraint.constant = warningTrackChartBackViewWith;
+    self.trackChartWidthConstraint.constant = warningTrackChartBackViewWith;
 }
 
 //replace background while dismiss notice above
@@ -127,11 +131,6 @@
         [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
         //create three parts charts
         [weakSelf createGraphicsFromAttributes];
-        if (self.defaultBadge == 0 && self.breakdownBadge == 0 && self.warningBadge == 0)
-        {
-            [weakSelf reloadBadgeNumberForDefaultPage];
-
-        }
     }
                             andFailureBlock:^{
         //display the login page if the server response fail
@@ -140,58 +139,29 @@
     }];
 }
 
-- (void)reloadBadgeNumberForDefaultPage
-{
-    typeof(self) __weak weakSelf = self;
-    [Post getHealthNumberWithBlock:^(NSUInteger count) {
-        self.defaultBadge = count;
-        [weakSelf reloadWarningBadgeNumber];
-    } andFailureBlock:^{
-        
-    }];
-}
-
-- (void)reloadWarningBadgeNumber
-{
-    typeof(self) __weak weakSelf = self;
-    [Post getAlarmsCountWithBlock:^(NSUInteger count) {
-        self.warningBadge = count;
-        [weakSelf reloadBreakdownBadgeNumber];
-    } andFailureBlock:^{
-        
-    }];
-}
-
-- (void)reloadBreakdownBadgeNumber
-{
-    typeof(self) __weak weakSelf = self;
-    [Post getFaultsCountWithBlock:^(NSUInteger count) {
-        self.breakdownBadge = count;
-        [weakSelf createTabBarBadgeView];
-    } andFailureBlock:^{
-        
-    }];
-}
-
 - (void)createTabBarBadgeView
 {
+    if (self.trackBarChart || ![[SessionManager sharedManager]isLoggedIn])
+    {
+        return;
+    }
+    
+    typeof(self) __weak weakSelf = self;
     CSPTransitionsViewController *transitionView = [[CSPGlobalViewControlManager sharedManager]getTransitionControl];
     NSMutableArray *tabBars = transitionView.tabs;
-    [tabBars enumerateObjectsUsingBlock:^(__kindof AHTabView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (idx == 0 && self.defaultBadge != 0)
+    [tabBars enumerateObjectsUsingBlock:^(__kindof AHTabView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop)
+    {
+        if (idx == 1 && [weakSelf.mainAttributes.currentAlarm floatValue] != 0)
         {
+            NSString *badgeText = [weakSelf.mainAttributes.currentAlarm floatValue] > 1000 ? @"..." : weakSelf.mainAttributes.currentAlarm;
             JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:obj.thumbnail alignment:JSBadgeViewAlignmentTopRight];
-            badgeView.badgeText = [@(self.defaultBadge) stringValue];
+            badgeView.badgeText = badgeText;
         }
-        else if (idx == 1 && self.warningBadge != 0)
+        else if (idx == 2 && [weakSelf.mainAttributes.currentFault floatValue] != 0)
         {
+            NSString *badgeText = [weakSelf.mainAttributes.currentFault floatValue] > 1000 ? @"..." : weakSelf.mainAttributes.currentFault;
             JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:obj.thumbnail alignment:JSBadgeViewAlignmentTopRight];
-            badgeView.badgeText = [@(self.warningBadge) stringValue];
-        }
-        else if (idx == 2 && self.breakdownBadge != 0)
-        {
-            JSBadgeView *badgeView = [[JSBadgeView alloc] initWithParentView:obj.thumbnail alignment:JSBadgeViewAlignmentTopRight];
-            badgeView.badgeText = [@(self.breakdownBadge) stringValue];
+            badgeView.badgeText = badgeText;
         }
     }];
 }
@@ -206,7 +176,7 @@
     [self.trackCountBtn setTitle:self.mainAttributes.currentFault forState:UIControlStateNormal];
     [self.trackCountBtn setTitle:self.mainAttributes.currentFault forState:UIControlStateHighlighted];
 
-    self.beatNumberLabel.text = self.mainAttributes.beatNumbers;
+    [self createTabBarBadgeView];
     [self createTrackBarChart];
     [self createWarningBarChart];
 }
@@ -285,9 +255,14 @@
 
 - (void)createTrackBarChart
 {
-    if (self.trackBarChart || ![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.faultInfos || self.mainAttributes.faultInfos.count == 0)
+    if (![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.faultInfos)
     {
         return;
+    }
+    
+    if (self.trackBarChart)
+    {
+        [self.trackBarChart removeFromSuperview];
     }
     
     static NSNumberFormatter *barChartFormatter;
@@ -319,22 +294,22 @@
     }];
 
     
-    self.trackBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(10, 78.0, self.trackChartBackView.bounds.size.width, self.trackChartBackView.bounds.size.height - 80)];
+    self.trackBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(0, 78.0, self.trackChartBackView.bounds.size.width, self.trackChartBackView.bounds.size.height - 80)];
     self.trackBarChart.backgroundColor = [UIColor clearColor];
     self.trackBarChart.yLabelFormatter = ^(CGFloat yValue){
         return [barChartFormatter stringFromNumber:[NSNumber numberWithFloat:yValue]];
     };
     
     self.trackBarChart.labelFont = [UIFont systemFontOfSize:9];
-    self.trackBarChart.yChartLabelWidth = 20.0;
-    self.trackBarChart.chartMarginLeft = 10.0;
+    self.trackBarChart.yChartLabelWidth = 40.0;
+    self.trackBarChart.chartMarginLeft = 30.0;
     self.trackBarChart.chartMarginRight = 10.0;
     self.trackBarChart.chartMarginTop = 0.0;
     self.trackBarChart.chartMarginBottom = 0.0;
     self.trackBarChart.labelMarginTop = 10;
     self.trackBarChart.yLabelSum = 3;
-    self.trackBarChart.xLabelWidth = 5.0;
-    self.trackBarChart.barWidth = 30;
+    self.trackBarChart.xLabelWidth = 10.0;
+    self.trackBarChart.barWidth = 20;
     self.trackBarChart.chartMarginTop = 0;
     self.trackBarChart.barBackgroundColor = [UIColor clearColor];
     
@@ -343,7 +318,7 @@
     self.trackBarChart.labelTextColor = blueColor;
     self.trackBarChart.showChartBorder = YES;
     [self.trackBarChart setXLabels:xStatus];
-    [self.trackBarChart setYMaxValue:maxY + 10];
+    [self.trackBarChart setYMaxValue:maxY + 50];
     [self.trackBarChart setYValues:numbers];
     [self.trackBarChart setStrokeColors:backColors];
     self.trackBarChart.isGradientShow = NO;
@@ -352,6 +327,7 @@
     [self.trackBarChart strokeChart];
     
     self.trackBarChart.delegate = self;
+    self.trackBarChart.userInteractionEnabled = YES;
     
     [self.trackChartBackView addSubview:self.trackBarChart];
 
@@ -365,9 +341,14 @@
 - (void)createWarningBarChart
 {
     
-    if (![[SessionManager sharedManager]isLoggedIn] || self.warningBarChart || !self.mainAttributes.alarmInfos || self.mainAttributes.alarmInfos.count == 0)
+    if (![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.alarmInfos)
     {
         return;
+    }
+    
+    if(self.warningBarChart)
+    {
+        [self.warningBarChart removeFromSuperview];
     }
     
     static NSNumberFormatter *barChartFormatter;
@@ -421,22 +402,22 @@
     }];
     
     
-    self.warningBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(10, 78.0, self.trackChartBackView.bounds.size.width, self.trackChartBackView.bounds.size.height - 80)];
+    self.warningBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(0, 78.0, self.trackChartBackView.bounds.size.width, self.trackChartBackView.bounds.size.height - 80)];
     self.warningBarChart.backgroundColor = [UIColor clearColor];
     self.warningBarChart.yLabelFormatter = ^(CGFloat yValue){
         return [barChartFormatter stringFromNumber:[NSNumber numberWithFloat:yValue]];
     };
     
-    self.warningBarChart.labelFont = [UIFont systemFontOfSize:13];
-    self.warningBarChart.yChartLabelWidth = 20.0;
-    self.warningBarChart.chartMarginLeft = 10.0;
+    self.warningBarChart.labelFont = [UIFont systemFontOfSize:9];
+    self.warningBarChart.yChartLabelWidth = 40.0;
+    self.warningBarChart.chartMarginLeft = 30.0;
     self.warningBarChart.chartMarginRight = 10.0;
     self.warningBarChart.chartMarginTop = 0.0;
     self.warningBarChart.chartMarginBottom = 0.0;
     self.warningBarChart.labelMarginTop = 10;
     self.warningBarChart.yLabelSum = 3;
-    self.warningBarChart.xLabelWidth = 5.0;
-    self.warningBarChart.barWidth = 30;
+    self.warningBarChart.xLabelWidth = 10.0;
+    self.warningBarChart.barWidth = 20;
     self.warningBarChart.barBackgroundColor = [UIColor clearColor];
     
     
@@ -453,7 +434,7 @@
     [self.warningBarChart strokeChart];
     
     self.warningBarChart.delegate = self;
-    
+    self.warningBarChart.userInteractionEnabled = YES;
     [self.barChartBackView addSubview:self.warningBarChart];
 
 }
@@ -564,4 +545,51 @@
 }
 
 
+- (void)userClickedOnLineKeyPoint:(CGPoint)point
+                        lineIndex:(NSInteger)lineIndex
+                       pointIndex:(NSInteger)pointIndex
+                        lineChart:(UIView *)lineChart
+{
+    if (lineChart == self.warningBarChart)
+    {
+        self.warningChartWidthConstraint.constant = self.warningChartWidthConstraint.constant * 2 + 10;
+        self.trackChartWidthConstraint.constant = 0;
+    }
+    else if (lineChart == self.trackBarChart)
+    {
+        self.trackChartWidthConstraint.constant = self.trackChartWidthConstraint.constant * 2 + 10;
+        self.warningChartWidthConstraint.constant = 0;
+    }
+}
+
+- (NSArray *)tabBarStatesForCurrentApps
+{
+    typeof(self) __weak weakSelf = self;
+    __block NSMutableArray *statesArray = [NSMutableArray arrayWithArray:@[@"-1",@"-1",@"-1"]];
+    CSPTransitionsViewController *transitionView = [[CSPGlobalViewControlManager sharedManager]getTransitionControl];
+    NSMutableArray *tabBars = transitionView.tabs;
+    [tabBars enumerateObjectsUsingBlock:^(__kindof AHTabView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop)
+     {
+         if (idx == 1 && [obj.thumbnail.subviews count] > 0)
+         {
+             NSString *badgeText = [weakSelf.mainAttributes.currentAlarm floatValue] > 1000 ? @"..." : weakSelf.mainAttributes.currentAlarm;
+             [statesArray replaceObjectAtIndex:0 withObject:badgeText];
+         }
+         else if (idx == 2)
+         {
+             if ([weakSelf.mainAttributes.currentFault floatValue] != 0.0)
+             {
+                 NSString *badgeText = [weakSelf.mainAttributes.currentFault floatValue] > 1000 ? @"..." : weakSelf.mainAttributes.currentFault;
+                 [statesArray replaceObjectAtIndex:1 withObject:badgeText];
+             }
+         }
+         
+         if ([obj isSelected])
+         {
+             [statesArray replaceObjectAtIndex:2 withObject:@(idx)];
+         }
+     }];
+    
+    return statesArray;
+}
 @end

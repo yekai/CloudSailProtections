@@ -39,11 +39,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>JSBadgeView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>MBProgressHUD.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -77,22 +72,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>076A55765C986A0B94AFE25B17EA7F87</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>1665AF973F8BFDD3B9FD8ED3C12B0079</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>2602F3D0DAC534568B6AD7EEA0DD1959</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>30D175643FEA4661466FC25C19BF6212</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>3781E692DF801195CF5F4CC6122FC92C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,17 +102,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>65FD5CE5BE4215A5EE629DC722EDECCC</key>
+		<key>749EDEB78FCA9730C29635EF041CBBB2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6CB2C44F8380F84240F4EB25104B3912</key>
+		<key>BA67A68E54D1B526D9C340ABA0D68AEA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8A687B62AF0425540AE2BC44E01EB5EC</key>
+		<key>CA76E3B94199C2533D3A1BB6097CD483</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -132,7 +122,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EA15E9B379E3C588DE8F6C730B96798F</key>
+		<key>ECFE91A5F62A18016889B4F95E4185E9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

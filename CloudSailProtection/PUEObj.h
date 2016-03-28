@@ -10,9 +10,9 @@
 
 @interface PUEObj : NSObject
 
-@property (nonatomic, copy) NSString *type;
-@property (nonatomic, copy) NSString *name;
-@property (nonatomic, copy) NSString *value;
+@property (nonatomic, copy) NSString *itEnergy;
+@property (nonatomic, copy) NSString *pue;
+@property (nonatomic, copy) NSString *totalEnergy;
 @property (nonatomic, copy) NSString *time;
 
 - (instancetype)initWithPUEAttribute:(NSDictionary *)pue;

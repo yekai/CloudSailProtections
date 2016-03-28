@@ -259,7 +259,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *password = [[SessionManager sharedManager].user password];
     NSString *dateString = [CloudUtility stringFromDateNow];
 
-    NSString *requestPath = [NSString stringWithFormat:@"cloud/fault/info/GetFaultInfo/20160101090733/%@/-1/handlerTime desc/1/20/%@/%@/%@",dateString, userId,password,token];
+    NSString *requestPath = [NSString stringWithFormat:@"cloud/fault/info/GetFaultInfo/20160101090733/%@/-1/createTime desc/1/20/%@/%@/%@",dateString, userId,password,token];
     requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
     return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
                                          parameters:nil
@@ -365,7 +365,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
 
 }
 
-+ (NSURLSessionDataTask *)getRoutiningInfoByDate:(BOOL)isToday andSuccessBlock:(void (^)(NSArray *routinsArray))block andFailureBlock:(void (^)())fblock
++ (NSURLSessionDataTask *)getRoutiningInfoByDate:(BOOL)isToday andSuccessBlock:(void (^)(NSDictionary *routinsDict))block andFailureBlock:(void (^)())fblock
 {
     NSString *userId = [[SessionManager sharedManager].user loginId];
     NSString *token = [[SessionManager sharedManager]token];
@@ -375,7 +375,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *previousDateString = [NSString stringWithFormat:@"%@000000",[dateString substringToIndex:9]];
     
 
-    NSString *requestPath = [NSString stringWithFormat:@"cloud/GetRoutingInfo/%@/%@/-1/time desc/1/50/%@/%@/%@",previousDateString, dateString, userId,password,token];
+    NSString *requestPath = [NSString stringWithFormat:@"cloud/GetRoutingInfo/%@/%@/-1/time asc/%@/%@/%@",previousDateString, dateString, userId,password,token];
     requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
     return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
                                          parameters:nil
@@ -397,7 +397,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 if (block && jsonObj)
                 {
-                    block(jsonObj[@"routings"]);
+                    block(jsonObj[@"routings"][0]);
                 }
                 if (!isSuccess)
                 {
@@ -666,7 +666,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
             }];
 }
 
-+ (NSURLSessionDataTask *)getPUEDataWithBlock:(void (^)(CGFloat pueData))block andFailureBlock:(void (^)())fblock
++ (NSURLSessionDataTask *)getPUEDataWithBlock:(void (^)(NSDictionary *pueData))block andFailureBlock:(void (^)())fblock
 {
     NSString *userId = [[SessionManager sharedManager].user loginId];
     NSString *token = [[SessionManager sharedManager]token];
@@ -693,7 +693,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 if (block && jsonObj)
                 {
-                    block([jsonObj[@"puedatas"][0][@"puevalue"] floatValue]);
+                    block(jsonObj[@"puedatas"][0]);
                 }
                 if (!isSuccess)
                 {
@@ -790,8 +790,11 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *token = [[SessionManager sharedManager]token];
     NSString *password = [[SessionManager sharedManager].user password];
     NSString *dateString = [CloudUtility stringFromDateNow];
+    NSString *monthString = [CloudUtility stringFromMonth];
+    NSString *yearString = [CloudUtility stringFromYear];
     
-    NSString *requestPath = [NSString stringWithFormat:@"cloud/fault/info/GetFaultNumByTime/%@/20000807090733/%@/-1/%@/%@/%@",type,dateString, userId,password,token];
+    NSString *selectedFirstDateString = [type isEqualToString:@"Day"] ? monthString : ([type isEqualToString:@"Mon"] ? yearString : @"20000807090733");
+    NSString *requestPath = [NSString stringWithFormat:@"cloud/fault/info/GetFaultNumByTime/%@/%@/%@/-1/time asc/%@/%@/%@",type,selectedFirstDateString,dateString, userId,password,token];
     requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
     return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
                                          parameters:nil

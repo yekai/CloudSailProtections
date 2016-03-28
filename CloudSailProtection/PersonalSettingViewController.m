@@ -43,7 +43,7 @@
             User *user = [[SessionManager sharedManager]user];
             [user setUserLoginInfo:hostInfoArray[0]];
             [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
-            weakSelf.settings = @[@{@"公司：":user.company},@{@"账号：":user.loginId},@{@"开通时间：":user.opentime},@{@"最后一次登录：":user.lastlogintime}];
+            weakSelf.settings = @[@{@"公司：":user.company},@{@"账号：":user.loginId},@{@"开通时间：":user.opentime},@{@"最后一次登录：":user.lastlogintime},@{@"email：":user.email},@{@"联系电话：":user.telNumber}];
             [weakSelf.tableView reloadData];
         } andFailureBlock:^{
             CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];

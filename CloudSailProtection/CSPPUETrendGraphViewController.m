@@ -99,7 +99,7 @@
     lineChart.lineWidth = 1;
     lineChart.color = lineChart.fillColor;
     lineChart.verticalGridStep = 5;
-    lineChart.horizontalGridStep = 4;
+//    lineChart.horizontalGridStep = 4;
     lineChart.displayDataPoint = NO;
     lineChart.valueLabelPosition = ValueLabelLeft;
     lineChart.drawInnerGrid = YES;

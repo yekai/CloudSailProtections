@@ -15,9 +15,9 @@
 {
     if (self = [super init])
     {
-        self.type = pue[@"type"];
-        self.name = pue[@"name"];
-        self.value = pue[@"value"];
+        self.itEnergy = pue[@"itEnergy"];
+        self.pue = pue[@"pue"];
+        self.totalEnergy = pue[@"totalEnergy"];
         self.time = pue[@"time"];
     }
     

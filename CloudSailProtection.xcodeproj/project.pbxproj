@@ -31,6 +31,7 @@
 		4D13F2821BFF67C500937365 /* PNBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D13F27D1BFF67C500937365 /* PNBar.m */; };
 		4D13F2831BFF67C500937365 /* PNBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D13F27F1BFF67C500937365 /* PNBarChart.m */; };
 		4D13F2841BFF67C500937365 /* PNCircleChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D13F2811BFF67C500937365 /* PNCircleChart.m */; };
+		4D14D8C81CA22DCB009D9C19 /* JSBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D14D8C71CA22DCB009D9C19 /* JSBadgeView.m */; };
 		4D1799201C08A22C00BFD8F4 /* TCircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D17991D1C08A22C00BFD8F4 /* TCircleView.m */; };
 		4D1799211C08A22C00BFD8F4 /* TCircleView+BaseConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D17991F1C08A22C00BFD8F4 /* TCircleView+BaseConfiguration.m */; };
 		4D1799251C08A53D00BFD8F4 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D1799241C08A53D00BFD8F4 /* GTMBase64.m */; };
@@ -230,6 +231,8 @@
 		4D13F27F1BFF67C500937365 /* PNBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PNBarChart.m; path = PNChart/PNBarChart.m; sourceTree = "<group>"; };
 		4D13F2801BFF67C500937365 /* PNCircleChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PNCircleChart.h; path = PNChart/PNCircleChart.h; sourceTree = "<group>"; };
 		4D13F2811BFF67C500937365 /* PNCircleChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PNCircleChart.m; path = PNChart/PNCircleChart.m; sourceTree = "<group>"; };
+		4D14D8C61CA22DCB009D9C19 /* JSBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSBadgeView.h; path = JSBadgeView/JSBadgeView.h; sourceTree = "<group>"; };
+		4D14D8C71CA22DCB009D9C19 /* JSBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSBadgeView.m; path = JSBadgeView/JSBadgeView.m; sourceTree = "<group>"; };
 		4D17991C1C08A22C00BFD8F4 /* TCircleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TCircleView.h; path = TCircleView/TCircleView.h; sourceTree = "<group>"; };
 		4D17991D1C08A22C00BFD8F4 /* TCircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TCircleView.m; path = TCircleView/TCircleView.m; sourceTree = "<group>"; };
 		4D17991E1C08A22C00BFD8F4 /* TCircleView+BaseConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TCircleView+BaseConfiguration.h"; path = "TCircleView/TCircleView+BaseConfiguration.h"; sourceTree = "<group>"; };
@@ -516,6 +519,15 @@
 			name = AHTabBarController;
 			sourceTree = "<group>";
 		};
+		4D14D8C31CA22D8E009D9C19 /* JSBadgeView */ = {
+			isa = PBXGroup;
+			children = (
+				4D14D8C61CA22DCB009D9C19 /* JSBadgeView.h */,
+				4D14D8C71CA22DCB009D9C19 /* JSBadgeView.m */,
+			);
+			name = JSBadgeView;
+			sourceTree = "<group>";
+		};
 		4D17991B1C08A21100BFD8F4 /* TCircleView */ = {
 			isa = PBXGroup;
 			children = (
@@ -781,6 +793,7 @@
 		4DC4B3201BF61BC700ED3AEF /* Framework */ = {
 			isa = PBXGroup;
 			children = (
+				4D14D8C31CA22D8E009D9C19 /* JSBadgeView */,
 				4D17999D1C1B209E00BFD8F4 /* WMGaugeView */,
 				4D17997A1C15DB4400BFD8F4 /* FSLineChart */,
 				4D1799221C08A52300BFD8F4 /* TKit */,
@@ -1052,6 +1065,7 @@
 				4D13F2791BFF66A100937365 /* PNScatterChart.m in Sources */,
 				4DF123CA1C42A4800018A098 /* PNCloudBar.m in Sources */,
 				4D17992C1C08A55E00BFD8F4 /* TConst.m in Sources */,
+				4D14D8C81CA22DCB009D9C19 /* JSBadgeView.m in Sources */,
 				4D8EFD501C26EB7D00895A66 /* PersonalSettingsTableViewCell.m in Sources */,
 				4D1799211C08A22C00BFD8F4 /* TCircleView+BaseConfiguration.m in Sources */,
 				4D13F27B1BFF66A100937365 /* PNScatterChartDataItem.m in Sources */,

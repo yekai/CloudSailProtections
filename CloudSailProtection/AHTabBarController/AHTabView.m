@@ -22,8 +22,6 @@
 //The label that displays the tab's title
 @property (nonatomic) UILabel *titleLabel;
 
-//Indicates whether the tab is currently selected or not
-@property (nonatomic, getter=isSelected) BOOL selected;
 
 @end
 

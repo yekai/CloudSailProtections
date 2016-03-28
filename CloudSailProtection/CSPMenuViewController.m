@@ -26,6 +26,7 @@
 //right root default page control
 @property (nonatomic, strong) UIViewController *transitionsNavigationController;
 
+@property (nonatomic, strong) NSIndexPath *selectedPath;
 @end
 
 @implementation CSPMenuViewController
@@ -80,6 +81,14 @@
     
     cell.textTitle.text = menuItem;
     cell.menuImage.image = menuImage;
+    if (indexPath.row != 0)
+    {
+        cell.extendImage.hidden = YES;
+    }
+    else
+    {
+        self.selectedPath = indexPath;
+    }
     
     [cell setBackgroundColor:[UIColor clearColor]];
     
@@ -141,6 +150,12 @@
     
     //close left menu page
     [self.slidingViewController resetTopViewAnimated:YES];
+    
+    MenuTableViewCell *previousSelectedCell = [tableView cellForRowAtIndexPath:self.selectedPath];
+    MenuTableViewCell *currentSelectedCell = [tableView cellForRowAtIndexPath:indexPath];
+    previousSelectedCell.extendImage.hidden = YES;
+    currentSelectedCell.extendImage.hidden = NO;
+    self.selectedPath = indexPath;
 }
 
 - (CSPTransitionsViewController *)getTabBarView

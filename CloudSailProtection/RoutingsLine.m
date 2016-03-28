@@ -32,6 +32,13 @@
     self.routingName.text = routing.routingName;
     self.routingValue.text = routing.routingValue;
     
+    if (routing.routingStatus == 0 )
+    {
+        self.deviceName.textColor = [UIColor redColor];
+        self.routingName.textColor = [UIColor redColor];
+        self.routingValue.textColor = [UIColor redColor];
+    }
+    
     return self;
 }
 

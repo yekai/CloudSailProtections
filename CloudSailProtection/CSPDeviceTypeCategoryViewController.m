@@ -50,6 +50,7 @@
             }];
             //display the related device collection items
             [weakSelf.collectionView reloadData];
+            [weakSelf performSelector:@selector(createBadgeView) withObject:nil afterDelay:0.5];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         }
                      andFailureBlock:^{
@@ -57,6 +58,19 @@
                          [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
                      }];
     }
+}
+
+- (void)createBadgeView
+{
+    __weak UICollectionView *weakCollectionView = self.collectionView;
+    [_devicesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        DeviceTypeCategory *category = (DeviceTypeCategory*)obj;
+        DeviceCategoryCollectionViewCell *cell = (DeviceCategoryCollectionViewCell*)[weakCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:idx inSection:0]];
+        if ([category.alarmCount floatValue] != 0.0)
+        {
+            [cell configureCellWithBadgeNumber:[@([category.alarmCount floatValue]) stringValue]];
+        }
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -121,7 +135,8 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     DeviceTypeCategory *deviceObj = (DeviceTypeCategory*)(self.devicesArray[indexPath.row]);
-    
+    DeviceCategoryCollectionViewCell *cell = (DeviceCategoryCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    [cell hideBadge];
     if ([deviceObj.typeCount floatValue] == 0)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"注意" message:@"该设备类别数目为0." preferredStyle:UIAlertControllerStyleAlert];
@@ -132,6 +147,7 @@
         
         return;
     }
+    
     CSPMyDevicesCollectionViewController *myDevice = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass(CSPMyDevicesCollectionViewController.class)];
     myDevice.deviceObj = deviceObj;
     [self.navigationController pushViewController:myDevice animated:YES];

@@ -17,4 +17,5 @@
 - (void)reloadMainAttributes;
 
 - (NSArray *)getAlarmsInfo;
+- (NSArray *)tabBarStatesForCurrentApps;
 @end

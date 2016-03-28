@@ -14,6 +14,7 @@
 #import "RoutingObj.h"
 #import "CSPGlobalViewControlManager.h"
 #import "UIStoryBoard+New.h"
+#import "CloudUtility.h"
 
 @interface CSPRoutingViewController ()<UITableViewDataSource, UITableViewDelegate,RoutingsTableViewCellDelegate>
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentView;
@@ -22,6 +23,9 @@
 @property (nonatomic, strong) NSMutableArray *todayRouting;
 @property (nonatomic, strong) NSMutableArray *yesterdayRouting;
 @property (nonatomic, assign) NSInteger selectedRow;
+@property (nonatomic, copy) NSString *routingName;
+@property (weak, nonatomic) IBOutlet UILabel *routingNameLabel;
+
 @end
 
 @implementation CSPRoutingViewController
@@ -59,22 +63,28 @@
     __block CSPRoutingViewController *weakSelf = self;
     __block NSMutableArray *set = [NSMutableArray array];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [Post getRoutiningInfoByDate:self.segmentView.selectedSegmentIndex == 0 andSuccessBlock:^(NSArray *routingNumArray) {
-        [routingNumArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSString *time = obj[@"time"];
-            RoutingObj *routing = [[RoutingObj alloc]initWithRoutingAttributes:obj];
-            if (![set containsObject:time])
-            {
-                [set addObject:time];
-                NSMutableArray *keyArray = [NSMutableArray array];
-                [keyArray addObject:routing];
-                [weakSelf.routingArray addObject:@{time:keyArray}];
-            }
-            else
-            {
-                NSMutableArray *keyArray = [weakSelf getRoutingValuesByKey:time];
-                [keyArray addObject:routing];
-            }
+    [Post getRoutiningInfoByDate:self.segmentView.selectedSegmentIndex == 0
+                 andSuccessBlock:^(NSDictionary *routingDict)
+     {
+         NSString *routingName = routingDict[@"name"];
+         weakSelf.routingName = routingName;
+        [routingDict[@"tdata"] enumerateObjectsUsingBlock:^(id  _Nonnull routingObj, NSUInteger routingIdx, BOOL * _Nonnull stopFirst) {
+            NSString *time = [CloudUtility stringForRoutingDateWithRoutingTime: routingObj[@"time"]];
+            [routingObj[@"devs"] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop){
+                RoutingObj *routing = [[RoutingObj alloc]initWithRoutingAttributes:obj];
+                if (![set containsObject:time])
+                {
+                    [set addObject:time];
+                    NSMutableArray *keyArray = [NSMutableArray array];
+                    [keyArray addObject:routing];
+                    [weakSelf.routingArray addObject:@{time:keyArray}];
+                }
+                else
+                {
+                    NSMutableArray *keyArray = [weakSelf getRoutingValuesByKey:time];
+                    [keyArray addObject:routing];
+                }
+            }];
         }];
         [weakSelf performSelector:@selector(reloadRoutingTable) withObject:nil afterDelay:0];
         
@@ -123,7 +133,7 @@
     [cell setDelegate:self];
     cell.backgroundColor = [UIColor clearColor];
     NSDictionary *dict = [self.routingArray objectAtIndex:indexPath.row];
-    cell.timeLabel.text = [[dict.allKeys lastObject]substringWithRange:NSMakeRange(11, 5)];
+    cell.timeLabel.text = [dict.allKeys lastObject];
     if (self.selectedRow == indexPath.row)
     {
         NSDictionary *keyDict = @{@"cell":cell,@"value":dict.allValues.lastObject};
@@ -142,6 +152,7 @@
 
 - (void)reloadRoutingTable
 {
+    self.routingNameLabel.text = self.routingName;
     [self.tableView reloadData];
     [MBProgressHUD hideHUDForView:self.view animated:YES];
 }

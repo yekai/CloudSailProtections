@@ -13,21 +13,22 @@
 /**
  * Callback method that gets invoked when the user taps on the chart line.
  */
-- (void)userClickedOnLinePoint:(CGPoint)point lineIndex:(NSInteger)lineIndex;
+- (void)userClickedOnLinePoint:(CGPoint)point lineIndex:(NSInteger)lineIndex lineChart:(UIView *)lineChart;
 
 /**
  * Callback method that gets invoked when the user taps on a chart line key point.
  */
 - (void)userClickedOnLineKeyPoint:(CGPoint)point
                         lineIndex:(NSInteger)lineIndex
-                       pointIndex:(NSInteger)pointIndex;
+                       pointIndex:(NSInteger)pointIndex
+                        lineChart:(UIView *)lineChart;
 
 /**
  * Callback method that gets invoked when the user taps on a chart bar.
  */
-- (void)userClickedOnBarAtIndex:(NSInteger)barIndex;
+- (void)userClickedOnBarAtIndex:(NSInteger)barIndex lineChart:(UIView *)lineChart;
 
 
-- (void)userClickedOnPieIndexItem:(NSInteger)pieIndex;
-- (void)didUnselectPieItem;
+- (void)userClickedOnPieIndexItem:(NSInteger)pieIndex lineChart:(UIView *)lineChart;
+- (void)didUnselectPieItemWithLineChart:(UIView *)lineChart;
 @end

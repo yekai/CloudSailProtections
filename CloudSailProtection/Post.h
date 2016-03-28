@@ -33,7 +33,7 @@
 + (NSURLSessionDataTask *)getHealthNumberWithBlock:(void (^)(NSUInteger count))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getDefaultPageAttributesWithBlock:(void (^)(NSDictionary *mainDict))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getPUEHisDataByPositionWithReportType:(NSString *)type successBlock:(void (^)(NSArray *puesArray))block andFailureBlock:(void (^)())fblock;
-+ (NSURLSessionDataTask *)getRoutiningInfoByDate:(BOOL)isToday andSuccessBlock:(void (^)(NSArray *routinsArray))block andFailureBlock:(void (^)())fblock;
++ (NSURLSessionDataTask *)getRoutiningInfoByDate:(BOOL)isToday andSuccessBlock:(void (^)(NSDictionary *routinsDict))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getCommunicationsInfoWithBlock:(void (^)(NSArray *communicationsArray))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getRoutingNumByTimeWithBlock:(void (^)(NSArray *routingNumArray))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getHostInfoWithBlock:(void (^)(NSArray *hostInfoArray))block andFailureBlock:(void (^)())fblock;
@@ -41,7 +41,7 @@
 + (NSURLSessionDataTask *)getDevicesInfosWithDeviceId:(NSString *)deviceId andBlock:(void (^)(NSArray *devicesInfosArray))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getNoticeHistoryWithBlock:(void (^)(NSArray *noticeHistoryArray))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getAgreementsInfoWithBlock:(void (^)(NSArray *agreementsArray))block andFailureBlock:(void (^)())fblock;
-+ (NSURLSessionDataTask *)getPUEDataWithBlock:(void (^)(CGFloat pueData))block andFailureBlock:(void (^)())fblock;
++ (NSURLSessionDataTask *)getPUEDataWithBlock:(void (^)(NSDictionary *pueData))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getAlarmNumberByLevelWithBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getAlarmNumberByTimeWithBlock:(void (^)(NSArray *alarmLevel))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getFaultNumByTimeWithType:(NSString *)type successBlock:(void (^)(NSArray *routinsArray))block andFailureBlock:(void (^)())fblock;
