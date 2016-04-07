@@ -35,7 +35,7 @@
     
      UIBarButtonItem *close = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(closeSelf)];
     
-    UIBarButtonItem *pue = [[UIBarButtonItem alloc]initWithTitle:@"PUE趋势图" style:UIBarButtonItemStylePlain target:self action:@selector(presentPueTrendGraphy)];
+    UIBarButtonItem *pue = [[UIBarButtonItem alloc]initWithTitle:@"PUE统计" style:UIBarButtonItemStylePlain target:self action:@selector(presentPueTrendGraphy)];
     
     self.navigationItem.rightBarButtonItems = @[close,pue];
     

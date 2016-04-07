@@ -17,6 +17,13 @@
 + (NSString *)isNullString:(NSString *)string;
 + (NSString *)stringFromMonth;
 + (NSString *)stringFromYear;
++ (NSString *)stringFromFiveDaysAgo;
++ (NSString *)stringFromFiveMonsAgo;
++ (NSString *)stringFromFiveYearsAgo;
 + (NSString *)stringForRoutingDateWithRoutingTime:(NSString *)intervalTime;
++ (NSString *)stringFromTodayStart;
++ (NSString *)stringFromYesterdayStart;
++ (NSString *)stringFromYesterdayEnd;
++ (NSString *)stringFromTodayEnd;
 @end
 

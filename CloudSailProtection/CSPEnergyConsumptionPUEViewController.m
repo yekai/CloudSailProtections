@@ -54,7 +54,7 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     [Post getPUEDataWithBlock:^(NSDictionary *pueData) {
-        NSNumber *pueValue = @([pueData[@"puevalue"] floatValue]);
+        NSString *pueValue = pueData[@"puevalue"];
         NSString *itEnergy = [NSString stringWithFormat:@"%.0f", [pueData[@"itEnergy"] floatValue]];
         NSString *totalEnergy = [NSString stringWithFormat:@"%.0f", [pueData[@"totalEnergy"] floatValue]];
         [weakSelf setGaugeViewValue:pueValue];
@@ -103,10 +103,10 @@
     
 }
 
-- (void)setGaugeViewValue:(NSNumber *)number
+- (void)setGaugeViewValue:(NSString *)number
 {
     _gaugeView.value = [number floatValue];
-    _gaugeView.unitOfMeasurement = [NSString stringWithFormat:@"实时PUE:%.1f",[number floatValue]];
+    _gaugeView.unitOfMeasurement = [NSString stringWithFormat:@"实时PUE:%@",number];
 }
 
 - (void)setItEnergyValue:(NSString *)itEnergy andTotalEnergyValue:(NSString *)totalEnergy

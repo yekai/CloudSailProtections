@@ -23,7 +23,7 @@
 #import "AFAppDotNetAPIClient.h"
 #import "AFNetworkActivityIndicatorManager.h"
 
-static NSString * const AFAppDotNetAPIBaseURLString = @"http://59.46.220.59:8080/";
+static NSString * const AFAppDotNetAPIBaseURLString = @"http://59.46.220.59:8080/cloud/";
 
 @implementation AFAppDotNetAPIClient
 

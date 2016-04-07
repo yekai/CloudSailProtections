@@ -28,12 +28,12 @@
         self.customerId = fault[@"customerid"];
         self.customerName = fault[@"customerName"];
         self.createTime = fault[@"createTime"];
-        self.handle = fault[@"handle"];
-        self.handleTime = fault[@"handleTime"];
-        self.handleTimeView = fault[@"handleTimeView"];
+        self.handle = fault[@"handler"];
+        self.handleTime = fault[@"handlerTime"];
+        self.handleTimeView = fault[@"handlerTimeView"];
         self.createTimeView = fault[@"createTimeView"];
-        self.handlerInfo = fault[@"handleInfo"];
-        self.confirm = fault[@"confirm"];
+        self.handlerInfo = fault[@"handlerInfo"];
+        self.confirm = fault[@"confirmer"];
         self.confirmInfo = fault[@"confirmInfo"];
         self.confirmTime = fault[@"confirmTime"];
         self.confirmTimeView = fault[@"confirmTimeView"];

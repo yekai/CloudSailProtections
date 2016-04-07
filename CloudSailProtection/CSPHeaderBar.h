@@ -12,6 +12,7 @@
 - (NSArray *)dataSourceForScrollView;
 - (void)didSelectNoticeAtIndex:(NSUInteger)index;
 - (void)didSelectActionBarItemAtIndex:(NSUInteger)index;
+- (void)reloadNotices;
 @end
 
 
@@ -23,4 +24,5 @@
 - (void)reloadNotice;
 - (void)startScrolling;
 + (BOOL)isDefaultPageNoticeDismiss;
+-(void)reloadNoticeBar;
 @end

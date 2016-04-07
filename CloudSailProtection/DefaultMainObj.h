@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface DefaultMainObj : NSObject
 
@@ -18,4 +19,12 @@
 @property (nonatomic, strong) NSMutableArray *faultInfos;
 
 - (instancetype)initWithMainDict:(NSDictionary *)main;
+- (NSArray *)faultsXstatus;
+- (NSMutableArray *)alarmsXStatus;
+- (UIColor *)chartColorForDefaultPage;
+- (NSMutableArray *)faultsNumberArray;
+- (NSMutableArray *)alarmsNumberArray;
+- (NSUInteger)maxFaultsNumber;
+- (NSUInteger)maxAlarmsNumber;
+- (NSMutableArray *)alarmsChartColors;
 @end

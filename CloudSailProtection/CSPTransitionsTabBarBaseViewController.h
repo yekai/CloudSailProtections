@@ -14,4 +14,8 @@
 //notice and action button bar
 @property (weak, nonatomic) IBOutlet CSPHeaderBar *headerBar;
 
+- (BOOL)getReloadStatus;
+- (void)setReloadStatus:(BOOL)status;
+- (void)toggleCircleChartShelterView;
+
 @end

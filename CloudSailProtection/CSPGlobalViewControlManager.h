@@ -18,4 +18,6 @@
 - (CSPDefaultPageViewController *)getDefaultPageControl;
 - (CSPTransitionsViewController *)getTransitionControl;
 - (CSPMenuViewController *)getMenuViewControl;
+- (BOOL)getReloadStatus;
+- (void)setReloadStatus:(BOOL)status;
 @end

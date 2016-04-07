@@ -125,7 +125,7 @@
     }
     
     if(_labelForValue) {
-        for(int i=0;i<_verticalGridStep;i++) {
+        for(NSInteger i=0;i<_verticalGridStep;i++) {
             UILabel* label = [self createLabelForValue:i];
             
             if(label) {
@@ -135,7 +135,7 @@
     }
     
     if(_labelForIndex) {
-        for(int i=0;i<_horizontalGridStep + 1;i++) {
+        for(NSInteger i=0;i<_horizontalGridStep + 1;i++) {
             UILabel* label = [self createLabelForIndex:i];
             
             if(label) {
@@ -250,7 +250,7 @@
     
     // draw grid
     if(_drawInnerGrid) {
-        for(int i=0;i<_horizontalGridStep;i++) {
+        for(NSInteger i=0;i<_horizontalGridStep;i++) {
             CGContextSetStrokeColorWithColor(ctx, [_innerGridColor CGColor]);
             CGContextSetLineWidth(ctx, _innerGridLineWidth);
             
@@ -267,7 +267,7 @@
             CGContextStrokePath(ctx);
         }
         
-        for(int i=0;i<_verticalGridStep + 1;i++) {
+        for(NSInteger i=0;i<_verticalGridStep + 1;i++) {
             // If the value is zero then we display the horizontal axis
             CGFloat v = maxBound - (maxBound - minBound) / _verticalGridStep * i;
             
@@ -368,7 +368,7 @@
     CGFloat maxBound = [self maxVerticalBound];
     CGFloat scale = _axisHeight / (maxBound - minBound);
     
-    for(int i=0;i<_data.count;i++) {
+    for(NSInteger i=0;i<_data.count;i++) {
         CGPoint p = [self getPointForIndex:i withScale:scale];
         p.y +=  minBound * scale;
         
@@ -417,7 +417,7 @@
     _min = MAXFLOAT;
     _max = -MAXFLOAT;
     
-    for(int i=0;i<_data.count;i++) {
+    for(NSInteger i=0;i<_data.count;i++) {
         NSNumber* number = _data[i];
         if([number floatValue] < _min)
             _min = [number floatValue];
@@ -444,13 +444,13 @@
         float newMin,newMax;
         
         if(fabs(_min) > fabs(_max)) {
-            int m = ceilf(fabs(_min) / step);
+            NSInteger m = ceilf(fabs(_min) / step);
             
             newMin = step * m * (_min > 0 ? 1 : -1);
             newMax = step * (_verticalGridStep - m) * (_max > 0 ? 1 : -1);
             
         } else {
-            int m = ceilf(fabs(_max) / step);
+            NSInteger m = ceilf(fabs(_max) / step);
             
             newMax = step * m * (_max > 0 ? 1 : -1);
             newMin = step * (_verticalGridStep - m) * (_min > 0 ? 1 : -1);
@@ -490,7 +490,7 @@
     CGFloat scale = powf(10, floorf(logValue));
     CGFloat n = ceilf(value / scale * 4);
     
-    int tmp = (int)(n) % gridStep;
+    NSInteger tmp = (NSInteger)(n) % gridStep;
     
     if(tmp != 0) {
         n += gridStep - tmp;
@@ -499,7 +499,7 @@
     return n * scale / 4.0f;
 }
 
-- (void)setGridStep:(int)gridStep
+- (void)setGridStep:(NSInteger)gridStep
 {
     _verticalGridStep = gridStep;
     _horizontalGridStep = gridStep;
@@ -525,7 +525,7 @@
     UIBezierPath* path = [UIBezierPath bezierPath];
     
     if(smoothed) {
-        for(int i=0;i<_data.count - 1;i++) {
+        for(NSInteger i=0;i<_data.count - 1;i++) {
             CGPoint controlPoint[2];
             CGPoint p = [self getPointForIndex:i withScale:scale];
             
@@ -572,7 +572,7 @@
         }
         
     } else {
-        for(int i=0;i<_data.count;i++) {
+        for(NSInteger i=0;i<_data.count;i++) {
             if(i > 0) {
                 [path addLineToPoint:[self getPointForIndex:i withScale:scale]];
             } else {

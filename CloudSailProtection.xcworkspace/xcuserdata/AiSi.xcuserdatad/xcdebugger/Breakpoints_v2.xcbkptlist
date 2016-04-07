@@ -9,22 +9,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/TabsBarBaseViewController.m"
-            timestampString = "480693514.490058"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "-displayHomeViewWithIndex:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Pods/JSBadgeView/JSBadgeView/JSBadgeView.m"
             timestampString = "480390223.280696"
             startingColumnNumber = "9223372036854775807"
@@ -57,22 +41,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/CSPDefaultPageViewController.m"
-            timestampString = "480687698.697887"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
-            landmarkName = "-userClickedOnLineKeyPoint:lineIndex:pointIndex:lineChart:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "CloudSailProtection/PNChart/PNLineChart.m"
             timestampString = "480659245.289655"
             startingColumnNumber = "9223372036854775807"
@@ -89,61 +57,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/CSPEnergyConsumptionViewController.m"
-            timestampString = "480685035.359818"
+            filePath = "CloudSailProtection/CSPHeaderBar.m"
+            timestampString = "481684201.343878"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "-reloadPUEHisData"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__54-[CSPEnergyConsumptionViewController reloadPUEHisData]_block_invoke"
-                  moduleName = "CloudSailProtection"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/AiSi/Desktop/CloudSailProtections/CloudSailProtection/CSPEnergyConsumptionViewController.m"
-                  timestampString = "480785406.684284"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
-                  offsetFromSymbolStart = "69">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__54-[CSPEnergyConsumptionViewController reloadPUEHisData]_block_invoke_2"
-                  moduleName = "CloudSailProtection"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/AiSi/Desktop/CloudSailProtections/CloudSailProtection/CSPEnergyConsumptionViewController.m"
-                  timestampString = "480785406.685377"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "71"
-                  endingLineNumber = "71"
-                  offsetFromSymbolStart = "60">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/Post.m"
-            timestampString = "480685039.757106"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
-            landmarkName = "+getPUEHisDataByPositionWithReportType:successBlock:andFailureBlock:"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "-reloadNoticeBar"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -153,61 +73,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/PUEObj.m"
-            timestampString = "480685116.222678"
+            filePath = "CloudSailProtection/HealthyCircleChartView.m"
+            timestampString = "481733012.845802"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
-            landmarkName = "-initWithPUEAttribute:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/CSPPUETrendGraphViewController.m"
-            timestampString = "480698238.648809"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
-            landmarkName = "-createGraph:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/CSPPUETrendGraphViewController.m"
-            timestampString = "480698281.504389"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "132"
-            endingLineNumber = "132"
-            landmarkName = "-createGraph:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CloudSailProtection/CSPPUETrendGraphViewController.m"
-            timestampString = "480698285.180157"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
-            landmarkName = "-createGraph:"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "-setShelterViewBackColor"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

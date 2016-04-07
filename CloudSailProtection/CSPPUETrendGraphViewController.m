@@ -7,7 +7,6 @@
 //
 
 #import "CSPPUETrendGraphViewController.h"
-#import "FSLineChart.h"
 #import "UIColor+FSPalette.h"
 #import "CloudUtility.h"
 #import "Post.h"
@@ -16,10 +15,13 @@
 #import "CSPGlobalViewControlManager.h"
 #import "UIStoryBoard+New.h"
 
-@interface CSPPUETrendGraphViewController ()
+
+@import Charts;
+@interface CSPPUETrendGraphViewController () <ChartViewDelegate>
 @property (weak, nonatomic) IBOutlet UIView *trendGraphBack;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *graphTypeSegment;
-@property (nonatomic, strong) FSLineChart *lineChart;
+@property (nonatomic, strong) IBOutlet LineChartView *chartView;
+@property (nonatomic, assign) CGRect frame;
 @end
 
 @implementation CSPPUETrendGraphViewController
@@ -73,8 +75,9 @@
 
 - (IBAction)graphSegmentValueChanged:(id)sender
 {
-    [self.lineChart removeFromSuperview];
-    self.lineChart = nil;
+    [self.chartView removeFromSuperview];
+    self.chartView = nil;
+    
     [self reloadFaultNumHisData];
 }
 
@@ -86,28 +89,43 @@
 
 - (void)createGraph:(NSArray *)routinsArray
 {
-    if (self.lineChart)
+    if (CGRectIsEmpty(self.frame))
     {
-        return;
+        self.frame = _chartView.frame;
     }
     
-    NSUInteger widthSpace = self.graphTypeSegment.bounds.size.width * 2 + ([CloudUtility isIphone6S] ? 110 : 40);
+    self.chartView = [[LineChartView alloc]initWithFrame:self.frame];
+    [_trendGraphBack addSubview:self.chartView];
+    _chartView.delegate = self;
+    _chartView.backgroundColor = [UIColor clearColor];
     
-    NSUInteger height = [CloudUtility isIphone6S] ? 460 : 420;
-    // Creating the line chart
-    FSLineChart* lineChart = [[FSLineChart alloc] initWithFrame:CGRectMake(30, 135, self.trendGraphBack.bounds.size.width - widthSpace, height)];
-    lineChart.lineWidth = 1;
-    lineChart.color = lineChart.fillColor;
-    lineChart.verticalGridStep = 5;
-//    lineChart.horizontalGridStep = 4;
-    lineChart.displayDataPoint = NO;
-    lineChart.valueLabelPosition = ValueLabelLeft;
-    lineChart.drawInnerGrid = YES;
-    lineChart.bezierSmoothing = YES;
-    lineChart.axisColor = [UIColor blueColor];
-    lineChart.innerGridColor = [UIColor blueColor];
-    lineChart.innerGridLineWidth = 1.0;
-    lineChart.backgroundColor = [UIColor clearColor];
+    _chartView.descriptionText = @"";
+    _chartView.noDataTextDescription = @"You need to provide data for the chart.";
+    
+    _chartView.dragEnabled = YES;
+    [_chartView setScaleEnabled:YES];
+    _chartView.pinchZoomEnabled = NO;
+    _chartView.drawGridBackgroundEnabled = YES;
+    _chartView.xAxis.labelTextColor = [UIColor darkGrayColor];
+    _chartView.leftAxis.labelTextColor = [UIColor darkGrayColor];
+    _chartView.xAxis.labelPosition = XAxisLabelPositionBottom;
+//    _chartView.xAxis.labelFont = [UIFont systemFontOfSize:8];
+    [_chartView.xAxis setLabelsToSkip:0];
+    _chartView.borderColor = [UIColor grayColor];
+    
+    ChartYAxis *leftAxis = _chartView.leftAxis;
+    [leftAxis removeAllLimitLines];
+    leftAxis.startAtZeroEnabled = YES;
+    leftAxis.gridLineDashLengths = @[@100.f, @0.f];
+    leftAxis.drawLimitLinesBehindDataEnabled = YES;
+    
+    _chartView.rightAxis.enabled = NO;
+    
+    [_chartView.viewPortHandler setMaximumScaleY: 2.f];
+    [_chartView.viewPortHandler setMaximumScaleX: 2.f];
+    
+    
+    _chartView.legend.form = ChartLegendFormLine;
     
     NSMutableArray *Xvalues = [NSMutableArray array];
     NSMutableArray *chartDataArray = [NSMutableArray array];
@@ -127,26 +145,70 @@
         }
     }];
     
+    NSMutableArray *xVals = [[NSMutableArray alloc] init];
     
-    lineChart.labelForIndex = ^(NSUInteger item) {
-        return Xvalues[item];
-    };
+    for (NSInteger i = 0; i < Xvalues.count; i++)
+    {
+        [xVals addObject:Xvalues[i]];
+    }
     
-    lineChart.labelForValue = ^(CGFloat value) {
-        return [NSString stringWithFormat:@"%.f", value];
-    };
+    NSMutableArray *yVals = [[NSMutableArray alloc] init];
+    NSInteger maxY = 0;
+    NSInteger minY = [chartDataArray[0] integerValue];
+    for (NSInteger i = 0; i < Xvalues.count; i++)
+    {
+        NSInteger value = [chartDataArray[i] integerValue];
+        [yVals addObject:[[ChartDataEntry alloc] initWithValue:value xIndex:i]];
+        if (value > maxY)
+        {
+            maxY = value;
+        }
+        
+        if (value < minY)
+        {
+            minY = value;
+        }
+    }
     
-    [lineChart setChartData:chartDataArray];
-    self.lineChart = lineChart;
-    [self.view addSubview:self.lineChart];
+    if (maxY < 10)
+    {
+        maxY += 0;
+    }
+    else if (maxY < 50)
+    {
+        maxY += 5;
+    }
+    else if(maxY < 100)
+    {
+        maxY += 10;
+    }
+    else
+    {
+        maxY += 15;
+    }
     
-    UIView *verticalLine = [[UIView alloc]initWithFrame:CGRectMake(35, 135, 1, height)];
-    verticalLine.backgroundColor = lineChart.fillColor;
-    [self.view addSubview:verticalLine];
+    LineChartDataSet *set1 = [[LineChartDataSet alloc] initWithYVals:yVals label:@""];
     
-    UIView *horizontalLine = [[UIView alloc]initWithFrame:CGRectMake(35, 130 + height , CGRectGetWidth(self.lineChart.bounds), 1)];
-    horizontalLine.backgroundColor = lineChart.fillColor;
-    [self.view addSubview:horizontalLine];
+    set1.lineDashLengths = @[@100.f, @0.f];
+    set1.highlightLineDashLengths = @[@100.f, @0.f];
+    [set1 setColor:UIColor.redColor];
+    [set1 setCircleColor:UIColor.orangeColor];
+    set1.lineWidth = 1.0;
+    set1.circleRadius = 10.0;
+    set1.drawCircleHoleEnabled = YES;
+    set1.drawCubicEnabled = NO;
+    set1.valueFont = [UIFont systemFontOfSize:9.f];
+    set1.valueTextColor = [UIColor orangeColor];
+    set1.fillAlpha = 65/255.0;
+    
+    NSMutableArray *dataSets = [[NSMutableArray alloc] init];
+    [dataSets addObject:set1];
+    
+    LineChartData *data = [[LineChartData alloc] initWithXVals:xVals dataSets:dataSets];
+    _chartView.leftAxis.customAxisMax = maxY;
+    _chartView.leftAxis.customAxisMin = minY;
+    _chartView.data = data;
+    [_chartView animateWithXAxisDuration:1.0 yAxisDuration:1.0];
 }
 
 
@@ -157,5 +219,17 @@
     [self dismissViewControllerAnimated:YES completion:^{
         [transitionView didSelectTabAtIndex:index];
     }];
+}
+
+#pragma mark - ChartViewDelegate
+
+- (void)chartValueSelected:(ChartViewBase * __nonnull)chartView entry:(ChartDataEntry * __nonnull)entry dataSetIndex:(NSInteger)dataSetIndex highlight:(ChartHighlight * __nonnull)highlight
+{
+    NSLog(@"chartValueSelected");
+}
+
+- (void)chartValueNothingSelected:(ChartViewBase * __nonnull)chartView
+{
+    NSLog(@"chartValueNothingSelected");
 }
 @end

@@ -49,9 +49,9 @@ typedef NS_ENUM(NSInteger, ValueLabelPositionType) {
 @property (nonatomic) ValueLabelPositionType valueLabelPosition;
 
 // Number of visible step in the chart
-@property (nonatomic) int gridStep;
-@property (nonatomic) int verticalGridStep;
-@property (nonatomic) int horizontalGridStep;
+@property (nonatomic) NSInteger gridStep;
+@property (nonatomic) NSInteger verticalGridStep;
+@property (nonatomic) NSInteger horizontalGridStep;
 
 // Margin of the chart
 @property (nonatomic) CGFloat margin;

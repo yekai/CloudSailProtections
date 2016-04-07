@@ -136,4 +136,15 @@ static BOOL isMessageViewDismiss = NO;
         [self.delegate didSelectNoticeAtIndex:0];
     }
 }
+
+-(void)reloadNoticeBar
+{
+    if (isMessageViewDismiss)
+    {
+        isMessageViewDismiss = NO;
+        self.scrollContentViewHeightConstraint.constant = 42;
+    }
+    
+    [self.delegate reloadNotices];
+}
 @end

@@ -23,6 +23,48 @@
     return [self stringFromDate:[NSDate date]];
 }
 
++ (NSString *)stringFromTodayStart
+{
+    NSString *dateString = [self stringFromDateNow];
+    return [NSString stringWithFormat:@"%@000000",[dateString substringToIndex:8]];
+}
+
++ (NSString *)stringFromYesterdayStart
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *comps = nil;
+    NSDate *now = [NSDate date];
+    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:now];
+    NSDateComponents *adcomps = [[NSDateComponents alloc] init];
+    [adcomps setYear:0];
+    [adcomps setMonth:0];
+    [adcomps setDay:-1];
+    NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
+    NSString *preDatesString = [self stringFromDate:newdate];
+    return [NSString stringWithFormat:@"%@000000",[preDatesString substringToIndex:8]];
+}
+
++ (NSString *)stringFromYesterdayEnd
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *comps = nil;
+    NSDate *now = [NSDate date];
+    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:now];
+    NSDateComponents *adcomps = [[NSDateComponents alloc] init];
+    [adcomps setYear:0];
+    [adcomps setMonth:0];
+    [adcomps setDay:-1];
+    NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
+    NSString *preDatesString = [self stringFromDate:newdate];
+    return [NSString stringWithFormat:@"%@235959",[preDatesString substringToIndex:8]];
+}
+
++ (NSString *)stringFromTodayEnd
+{
+    NSString *dateString = [self stringFromDateNow];
+    return [NSString stringWithFormat:@"%@235959",[dateString substringToIndex:8]];
+}
+
 + (NSString *)stringFromMonth
 {
     NSString *dateString = [self stringFromDateNow];
@@ -33,6 +75,51 @@
 {
     NSString *dateString = [self stringFromDateNow];
     return [NSString stringWithFormat:@"%@0101000000",[dateString substringToIndex:4]];
+}
+
++ (NSString *)stringFromFiveDaysAgo
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *comps = nil;
+    NSDate *now = [NSDate date];
+    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:now];
+    NSDateComponents *adcomps = [[NSDateComponents alloc] init];
+    [adcomps setYear:0];
+    [adcomps setMonth:0];
+    [adcomps setDay:-4];
+    NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
+    NSString *preDatesString = [self stringFromDate:newdate];
+    return [NSString stringWithFormat:@"%@000000",[preDatesString substringToIndex:8]];
+}
+
++ (NSString *)stringFromFiveMonsAgo
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *comps = nil;
+    NSDate *now = [NSDate date];
+    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:now];
+    NSDateComponents *adcomps = [[NSDateComponents alloc] init];
+    [adcomps setYear:0];
+    [adcomps setMonth:-5];
+    [adcomps setDay:0];
+    NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
+    NSString *preDatesString = [self stringFromDate:newdate];
+    return [NSString stringWithFormat:@"%@000000",[preDatesString substringToIndex:8]];
+}
+
++ (NSString *)stringFromFiveYearsAgo
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *comps = nil;
+    NSDate *now = [NSDate date];
+    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:now];
+    NSDateComponents *adcomps = [[NSDateComponents alloc] init];
+    [adcomps setYear:-5];
+    [adcomps setMonth:0];
+    [adcomps setDay:0];
+    NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
+    NSString *preDatesString = [self stringFromDate:newdate];
+    return [NSString stringWithFormat:@"%@000000",[preDatesString substringToIndex:8]];
 }
 
 + (BOOL)isIphone6S

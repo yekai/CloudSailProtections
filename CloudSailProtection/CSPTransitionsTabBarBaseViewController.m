@@ -15,10 +15,12 @@
 #import "SessionManager.h"
 #import "CSPLoginViewController.h"
 #import "UIStoryBoard+New.h"
+#import "AMSmoothAlertView.h"
 
+static BOOL isReloadApps = NO;
 static NSMutableArray *noticeArray = nil;
 
-@interface CSPTransitionsTabBarBaseViewController ()
+@interface CSPTransitionsTabBarBaseViewController ()<AMSmoothAlertViewDelegate>
 @end
 
 @implementation CSPTransitionsTabBarBaseViewController
@@ -44,29 +46,21 @@ static NSMutableArray *noticeArray = nil;
         noticeArray = [NSMutableArray array];
     }
     
-    
-    if ([noticeArray count] == 0)
-    {
-        __block CSPTransitionsTabBarBaseViewController *weakSelf =self;
-        __block NSMutableArray *_noticeArray = noticeArray;
-        //create notice pull request
-        [Post getCorporationNoticeWithBlock:^(NSArray *noticeArray) {
-            //parse notice response and set notice array
-            [noticeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [_noticeArray addObject:[[Notice alloc]initWithAttribute:obj]];
-            }];
-            //set header bar notice with notice response
-            [weakSelf.headerBar reloadNotice];
-        }
-                            andFailureBlock:^{
-            CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-            [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    __block CSPTransitionsTabBarBaseViewController *weakSelf =self;
+    __block NSMutableArray *_noticeArray = noticeArray;
+    //create notice pull request
+    [Post getCorporationNoticeWithBlock:^(NSArray *noticeArray) {
+        //parse notice response and set notice array
+        [noticeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [_noticeArray addObject:[[Notice alloc]initWithAttribute:obj]];
         }];
+        //set header bar notice with notice response
+        [weakSelf.headerBar reloadNotice];
     }
-    else
-    {
-        [_headerBar reloadNotice];
-    }
+                        andFailureBlock:^{
+        CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
+        [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+    }];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -143,6 +137,30 @@ static NSMutableArray *noticeArray = nil;
     
     if (index == 4)
     {
+        [self presentAlertForClosingApps];
+    }
+}
+
+- (void)didSelectNoticeAtIndex:(NSUInteger)index
+{
+    
+}
+
+- (void)presentAlertForClosingApps
+{
+    AMSmoothAlertView *alert = [[AMSmoothAlertView alloc]initFadeAlertWithTitle:@"提示" andText:@"确实要关闭程序么？" andCancelButton:YES forAlertType:AlertInfo];
+    [alert.defaultButton setTitle:@"确实" forState:UIControlStateNormal];
+    [alert.cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+    alert.cornerRadius = 3.0f;
+    alert.delegate = self;
+    
+    [alert show];
+}
+
+-(void)alertView:(AMSmoothAlertView *)alertView didDismissWithButton:(UIButton *)button
+{
+    if (alertView.defaultButton == button)
+    {
         NSHTTPCookie *cookie;
         NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
         for (cookie in [storage cookies])
@@ -153,12 +171,26 @@ static NSMutableArray *noticeArray = nil;
         
         CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
         [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+        
+        isReloadApps = YES;
+        
+        [self.headerBar reloadNoticeBar];
+        [self toggleCircleChartShelterView];
     }
 }
 
-- (void)didSelectNoticeAtIndex:(NSUInteger)index
+- (void)toggleCircleChartShelterView
 {
     
 }
 
+- (BOOL)getReloadStatus
+{
+    return isReloadApps;
+}
+
+- (void)setReloadStatus:(BOOL)status
+{
+    isReloadApps = status;
+}
 @end

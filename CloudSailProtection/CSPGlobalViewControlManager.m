@@ -50,4 +50,16 @@
     ECSlidingViewController *slidingControl = [self rootCotrol];
     return (CSPMenuViewController*)slidingControl.underLeftViewController;
 }
+
+- (BOOL)getReloadStatus
+{
+    CSPDefaultPageViewController *defaultPage = [self getDefaultPageControl];
+    return [defaultPage getReloadStatus];
+}
+
+- (void)setReloadStatus:(BOOL)status
+{
+    CSPDefaultPageViewController *defaultPage = [self getDefaultPageControl];
+    [defaultPage setReloadStatus:status];
+}
 @end

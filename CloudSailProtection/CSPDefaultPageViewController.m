@@ -46,14 +46,16 @@
 @property (weak, nonatomic) IBOutlet UIView *barChartBackView;
 @property (weak, nonatomic) IBOutlet UIView *trackChartBackView;
 
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *healthyBackBottomConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *healthyWidthConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *warningChartWidthConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *trackChartWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *healthyBackBottomConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *healthyWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *warningChartTrailingConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *trackChartLeadingConstraint;
 
 //alarm and breakdown button to display the data
 @property (weak, nonatomic) IBOutlet UIButton *alarmCountBtn;
 @property (weak, nonatomic) IBOutlet UIButton *trackCountBtn;
+@property (weak, nonatomic) IBOutlet UIButton *warningChartBtn;
+@property (weak, nonatomic) IBOutlet UIButton *trackChartBtn;
 
 
 @end
@@ -100,9 +102,21 @@
     
     [self.healthyBackView insertSubview:self.circleChart atIndex:1];
     
-    CGFloat warningTrackChartBackViewWith = (width - 10)/2;
-    self.warningChartWidthConstraint.constant = warningTrackChartBackViewWith;
-    self.trackChartWidthConstraint.constant = warningTrackChartBackViewWith;
+    CGFloat warningTrackChartBackViewWith = (width - 10)/2.0;
+    self.warningChartTrailingConstraint.constant = warningTrackChartBackViewWith + 20;
+    self.trackChartLeadingConstraint.constant = warningTrackChartBackViewWith + 20;
+}
+
+- (NSNumberFormatter*)defaultNumberFormatter
+{
+    static NSNumberFormatter *barChartFormatter;
+    if (!barChartFormatter){
+        barChartFormatter = [[NSNumberFormatter alloc] init];
+        barChartFormatter.numberStyle = NSNumberFormatterDecimalStyle;
+        barChartFormatter.allowsFloats = NO;
+        barChartFormatter.maximumFractionDigits = 0;
+    }
+    return barChartFormatter;
 }
 
 //replace background while dismiss notice above
@@ -110,6 +124,8 @@
 {
     [self.circleChart setShelterViewBackColor];
 }
+
+
 
 //make a pull request to fetch the default dash server data
 - (void)reloadMainAttributes
@@ -255,7 +271,7 @@
 
 - (void)createTrackBarChart
 {
-    if (![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.faultInfos)
+    if (![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.faultInfos || [self.mainAttributes.faultInfos isEqual: [NSNull null]])
     {
         return;
     }
@@ -265,36 +281,17 @@
         [self.trackBarChart removeFromSuperview];
     }
     
-    static NSNumberFormatter *barChartFormatter;
-    if (!barChartFormatter){
-        barChartFormatter = [[NSNumberFormatter alloc] init];
-        barChartFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-        barChartFormatter.allowsFloats = NO;
-        barChartFormatter.maximumFractionDigits = 0;
-    }
+    NSNumberFormatter *barChartFormatter = [self defaultNumberFormatter];
  
-    NSMutableArray *numbers = [NSMutableArray array];
-    NSMutableArray *xStatus = [NSMutableArray array];
-    NSMutableArray *backColors = [NSMutableArray array];
-    UIColor *blueColor = [UIColor colorWithRed:102/255.0 green:192/255.0 blue:251/255.0 alpha:1];
+    NSMutableArray *numbers = [self.mainAttributes faultsNumberArray];
+    NSArray *xStatus = [self.mainAttributes faultsXstatus];
+    UIColor *blueColor = [self.mainAttributes chartColorForDefaultPage];
+    NSMutableArray *backColors = [NSMutableArray arrayWithObjects:blueColor,blueColor,blueColor,blueColor,blueColor,blueColor, nil];
+    NSInteger maxY = [self.mainAttributes maxFaultsNumber];
 
-    [self.mainAttributes.faultInfos enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        [numbers addObject:@([obj[@"count"] integerValue])];
-        [xStatus addObject:obj[@"statusName"] ];
-        [backColors addObject:blueColor];
-    }];
-    
-    __block NSInteger maxY = [numbers[0] integerValue];
-    
-    [numbers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj integerValue] > maxY)
-        {
-            maxY = [obj integerValue];
-        }
-    }];
-
-    
-    self.trackBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(0, 78.0, self.trackChartBackView.bounds.size.width, self.trackChartBackView.bounds.size.height - 80)];
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat width = [self.trackChartLeadingConstraint constant] == 10 ? screenWidth - 20 : (screenWidth - 30)/2.0;
+    self.trackBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(0, 78.0, width, self.trackChartBackView.bounds.size.height - 80)];
     self.trackBarChart.backgroundColor = [UIColor clearColor];
     self.trackBarChart.yLabelFormatter = ^(CGFloat yValue){
         return [barChartFormatter stringFromNumber:[NSNumber numberWithFloat:yValue]];
@@ -330,6 +327,7 @@
     self.trackBarChart.userInteractionEnabled = YES;
     
     [self.trackChartBackView addSubview:self.trackBarChart];
+    [self.trackChartBackView bringSubviewToFront:self.trackChartBtn];
 
 }
 
@@ -341,7 +339,7 @@
 - (void)createWarningBarChart
 {
     
-    if (![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.alarmInfos)
+    if (![[SessionManager sharedManager]isLoggedIn] || !self.mainAttributes.alarmInfos || [self.mainAttributes.alarmInfos isEqual: [NSNull null]])
     {
         return;
     }
@@ -351,58 +349,17 @@
         [self.warningBarChart removeFromSuperview];
     }
     
-    static NSNumberFormatter *barChartFormatter;
-    if (!barChartFormatter){
-        barChartFormatter = [[NSNumberFormatter alloc] init];
-        barChartFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-        barChartFormatter.allowsFloats = NO;
-        barChartFormatter.maximumFractionDigits = 0;
-    }
+    NSNumberFormatter *barChartFormatter = [self defaultNumberFormatter];
     
-    NSMutableArray *numbers = [NSMutableArray arrayWithObjects:[NSNull null],[NSNull null],[NSNull null], nil];
-    NSMutableArray *xStatus = [NSMutableArray arrayWithObjects:[NSNull null],[NSNull null],[NSNull null], nil];
-    NSMutableArray *backColors = [NSMutableArray array];
-    UIColor *blueColor = [UIColor colorWithRed:102/255.0 green:192/255.0 blue:251/255.0 alpha:1];
-    [self.mainAttributes.alarmInfos enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        id number = numbers[[obj[@"alarmLevel"] integerValue] - 1];
-        if (number != [NSNull null])
-        {
-            [numbers replaceObjectAtIndex:([obj[@"alarmLevel"] integerValue] - 1) withObject:@([obj[@"count"] integerValue] + [number integerValue])];
-        }
-        else
-        {
-            [numbers replaceObjectAtIndex:([obj[@"alarmLevel"] integerValue] - 1) withObject:@([obj[@"count"] integerValue])];
-            [xStatus replaceObjectAtIndex:([obj[@"alarmLevel"] integerValue] - 1) withObject:obj[@"alarmLevelName"]];
-            [backColors addObject:blueColor];
-
-        }
-    }];
+    NSMutableArray *numbers = [self.mainAttributes alarmsNumberArray];
+    NSMutableArray *xStatus = [self.mainAttributes alarmsXStatus];
+    NSMutableArray *backColors = [self.mainAttributes alarmsChartColors];
+    UIColor *blueColor = [self.mainAttributes chartColorForDefaultPage];
+    NSInteger maxY = [self.mainAttributes maxAlarmsNumber];
     
-    [numbers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj == [NSNull null])
-        {
-            [numbers removeObjectAtIndex:idx];
-        }
-    }];
-    
-    [xStatus enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj == [NSNull null])
-        {
-            [xStatus removeObjectAtIndex:idx];
-        }
-    }];
-    
-    __block NSInteger maxY = [numbers[0] integerValue];
-    
-    [numbers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj != [NSNull null] && [obj integerValue] > maxY)
-        {
-            maxY = [obj integerValue];
-        }
-    }];
-    
-    
-    self.warningBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(0, 78.0, self.trackChartBackView.bounds.size.width, self.trackChartBackView.bounds.size.height - 80)];
+    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
+    CGFloat width = [self.warningChartTrailingConstraint constant] == 10 ? screenWidth - 20 : (screenWidth - 30)/2.0;
+    self.warningBarChart = [[PNCloudeBarChart alloc] initWithFrame:CGRectMake(0, 78.0, width, self.trackChartBackView.bounds.size.height - 80)];
     self.warningBarChart.backgroundColor = [UIColor clearColor];
     self.warningBarChart.yLabelFormatter = ^(CGFloat yValue){
         return [barChartFormatter stringFromNumber:[NSNumber numberWithFloat:yValue]];
@@ -436,6 +393,7 @@
     self.warningBarChart.delegate = self;
     self.warningBarChart.userInteractionEnabled = YES;
     [self.barChartBackView addSubview:self.warningBarChart];
+    [self.barChartBackView bringSubviewToFront:self.warningChartBtn];
 
 }
 
@@ -446,13 +404,7 @@
         return;
     }
     
-    static NSNumberFormatter *barChartFormatter;
-    if (!barChartFormatter){
-        barChartFormatter = [[NSNumberFormatter alloc] init];
-        barChartFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-        barChartFormatter.allowsFloats = NO;
-        barChartFormatter.maximumFractionDigits = 0;
-    }
+    NSNumberFormatter *barChartFormatter = [self defaultNumberFormatter];
     
     NSUInteger trackHeight = [CloudUtility isIphone6S] ? 280 : 250;
     NSUInteger trackY = [CloudUtility isIphone6S] ? 248 : 228;
@@ -496,14 +448,7 @@
         return;
     }
     
-    static NSNumberFormatter *barChartFormatter;
-    if (!barChartFormatter){
-        barChartFormatter = [[NSNumberFormatter alloc] init];
-        barChartFormatter.numberStyle = NSNumberFormatterDecimalStyle;
-        barChartFormatter.allowsFloats = NO;
-        barChartFormatter.maximumFractionDigits = 0;
-    }
-    
+    NSNumberFormatter *barChartFormatter = [self defaultNumberFormatter];    
     
     NSUInteger trackHeight = [CloudUtility isIphone6S] ? 280 : 250;
     NSUInteger trackY = [CloudUtility isIphone6S] ? 248 : 228;
@@ -550,16 +495,6 @@
                        pointIndex:(NSInteger)pointIndex
                         lineChart:(UIView *)lineChart
 {
-    if (lineChart == self.warningBarChart)
-    {
-        self.warningChartWidthConstraint.constant = self.warningChartWidthConstraint.constant * 2 + 10;
-        self.trackChartWidthConstraint.constant = 0;
-    }
-    else if (lineChart == self.trackBarChart)
-    {
-        self.trackChartWidthConstraint.constant = self.trackChartWidthConstraint.constant * 2 + 10;
-        self.warningChartWidthConstraint.constant = 0;
-    }
 }
 
 - (NSArray *)tabBarStatesForCurrentApps
@@ -575,7 +510,7 @@
              NSString *badgeText = [weakSelf.mainAttributes.currentAlarm floatValue] > 1000 ? @"..." : weakSelf.mainAttributes.currentAlarm;
              [statesArray replaceObjectAtIndex:0 withObject:badgeText];
          }
-         else if (idx == 2)
+         else if (idx == 2 && [obj.thumbnail.subviews count] > 0)
          {
              if ([weakSelf.mainAttributes.currentFault floatValue] != 0.0)
              {
@@ -591,5 +526,42 @@
      }];
     
     return statesArray;
+}
+
+- (IBAction)warningChartTapped:(id)sender
+{
+    CGFloat width = ([UIScreen mainScreen].bounds.size.width - 30)/2.0;
+    if (width == ((UIButton *)sender).bounds.size.width)
+    {
+        [self.barChartBackView.superview bringSubviewToFront:self.barChartBackView];
+        self.warningChartTrailingConstraint.constant = 10;
+    }
+    else
+    {
+        self.warningChartTrailingConstraint.constant = width + 20;
+    }
+    
+    [self createWarningBarChart];
+}
+
+- (IBAction)trackChartTapped:(id)sender
+{
+    CGFloat width = ([UIScreen mainScreen].bounds.size.width - 30)/2.0;
+    if (width == ((UIButton *)sender).bounds.size.width)
+    {
+        [self.trackChartBackView.superview bringSubviewToFront:self.trackChartBackView];
+        self.trackChartLeadingConstraint.constant = 10;
+    }
+    else
+    {
+        self.trackChartLeadingConstraint.constant = width + 20;
+    }
+    
+    [self createTrackBarChart];
+}
+
+- (void)toggleCircleChartShelterView
+{
+    [self.circleChart toggleShelterViewBackColor];
 }
 @end

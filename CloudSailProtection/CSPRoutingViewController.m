@@ -25,6 +25,8 @@
 @property (nonatomic, assign) NSInteger selectedRow;
 @property (nonatomic, copy) NSString *routingName;
 @property (weak, nonatomic) IBOutlet UILabel *routingNameLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *routingAboveImage;
+@property (weak, nonatomic) IBOutlet UIView *leftLineView;
 
 @end
 
@@ -63,6 +65,10 @@
     __block CSPRoutingViewController *weakSelf = self;
     __block NSMutableArray *set = [NSMutableArray array];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    self.tableView.hidden = YES;
+    self.routingAboveImage.hidden = YES;
+    self.routingNameLabel.hidden = YES;
+    self.leftLineView.hidden = YES;
     [Post getRoutiningInfoByDate:self.segmentView.selectedSegmentIndex == 0
                  andSuccessBlock:^(NSDictionary *routingDict)
      {
@@ -89,8 +95,7 @@
         [weakSelf performSelector:@selector(reloadRoutingTable) withObject:nil afterDelay:0];
         
     } andFailureBlock:^{
-        CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-        [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+        [weakSelf reloadRoutingTable];
     }];
 }
 
@@ -126,9 +131,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSString *tableViewCellIdentifier = nil;
     RoutingsTableViewCell *cell = nil;
-    
-    NSString *tableViewCellIdentifier = self.selectedRow == indexPath.row ? @"SelectedRoutingIdentifier" : @"UnSelectedRoutingIdentifier";
+    if (self.routingArray.count == 0)
+    {
+        tableViewCellIdentifier = @"RoutingNoInfoIdentifier";
+        cell = [tableView dequeueReusableCellWithIdentifier:tableViewCellIdentifier];
+        
+        return cell;
+    }
+        
+    tableViewCellIdentifier = self.selectedRow == indexPath.row ? @"SelectedRoutingIdentifier" : @"UnSelectedRoutingIdentifier";
     cell = [tableView dequeueReusableCellWithIdentifier:tableViewCellIdentifier];
     [cell setDelegate:self];
     cell.backgroundColor = [UIColor clearColor];
@@ -152,13 +165,25 @@
 
 - (void)reloadRoutingTable
 {
-    self.routingNameLabel.text = self.routingName;
+    if (self.routingArray.count != 0)
+    {
+        self.routingNameLabel.text = self.routingName;
+        self.routingAboveImage.hidden = NO;
+        self.routingNameLabel.hidden = NO;
+        self.leftLineView.hidden = NO;
+    }
+    
     [self.tableView reloadData];
     [MBProgressHUD hideHUDForView:self.view animated:YES];
+    self.tableView.hidden = NO;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([self.routingArray count] == 0)
+    {
+        return 300;
+    }
     NSDictionary *dict = [self.routingArray objectAtIndex:indexPath.row];
     NSMutableArray *keyValue = dict.allValues.lastObject;
     return self.selectedRow == indexPath.row ? 60 + (keyValue.count + 1) * 20 : 50;
@@ -171,7 +196,8 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.routingArray count];
+    NSInteger count = [self.routingArray count];
+    return count == 0 ? 1 : count;
 }
 
 - (void)timePointBtnTapped:(RoutingsTableViewCell *)cell
