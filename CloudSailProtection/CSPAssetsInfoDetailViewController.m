@@ -47,6 +47,11 @@
                             assetCount:self.assets.deviceCount
                           successBlock:^(NSArray *alarmLevel)
     {
+        if ([alarmLevel isEqual:[NSNull null]])
+        {
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+            return ;
+        }
         [alarmLevel enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             DeviceInfoObj *infoObj = [[DeviceInfoObj alloc]initWithDeviceAttribute:obj];
             [weakWaringArray addObject:infoObj];

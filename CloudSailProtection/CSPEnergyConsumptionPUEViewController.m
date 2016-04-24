@@ -50,16 +50,22 @@
 
 - (void)reloadPUEData
 {
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
     __block CSPEnergyConsumptionPUEViewController *weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     [Post getPUEDataWithBlock:^(NSDictionary *pueData) {
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        if ([pueData isEqual:[NSNull null]])
+        {
+            pueData = @{@"puevalue":@"0.0",@"itEnergy":@"0",@"totalEnergy":@"0"};
+        }
         NSString *pueValue = pueData[@"puevalue"];
         NSString *itEnergy = [NSString stringWithFormat:@"%.0f", [pueData[@"itEnergy"] floatValue]];
         NSString *totalEnergy = [NSString stringWithFormat:@"%.0f", [pueData[@"totalEnergy"] floatValue]];
         [weakSelf setGaugeViewValue:pueValue];
         [weakSelf setItEnergyValue:itEnergy andTotalEnergyValue:totalEnergy];
-        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        
     } andFailureBlock:^{
         CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
         [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
@@ -119,6 +125,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+    
     [self reloadPUEData];
 }
 

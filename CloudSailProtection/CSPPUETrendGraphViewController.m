@@ -14,6 +14,7 @@
 #import "CSPLoginViewController.h"
 #import "CSPGlobalViewControlManager.h"
 #import "UIStoryBoard+New.h"
+#import "CloudSailProtection-Swift.h"
 
 
 @import Charts;
@@ -22,6 +23,8 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *graphTypeSegment;
 @property (nonatomic, strong) IBOutlet LineChartView *chartView;
 @property (nonatomic, assign) CGRect frame;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
+
 @end
 
 @implementation CSPPUETrendGraphViewController
@@ -59,18 +62,53 @@
 
 - (void)reloadFaultNumHisData
 {
+    self.errorView.hidden = YES;
+    BOOL isFromEnergyConsumption = self.navigationController.viewControllers.count > 1;
     NSString *type = self.graphTypeSegment.selectedSegmentIndex == 0 ? @"Day" : self.graphTypeSegment.selectedSegmentIndex == 1 ? @"Mon" : @"Yea";
     __weak CSPPUETrendGraphViewController *weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [Post getFaultNumByTimeWithType:type
-                       successBlock:^(NSArray *routinsArray)
+    
+    if (!isFromEnergyConsumption)
     {
-        [weakSelf createGraph:routinsArray];
-        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
-    }andFailureBlock:^{
-        CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-        [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
-    }];
+        [Post getFaultNumByTimeWithType:type
+                           successBlock:^(NSArray *routinsArray)
+         {
+             if ([routinsArray isEqual:[NSNull null]])
+             {
+                 [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+                 return ;
+             }
+             [weakSelf createGraph:routinsArray];
+             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+         }andFailureBlock:^{
+             self.errorView.hidden = NO;
+             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+         }];
+    }
+    else
+    {
+        [Post getPUEHisDataByPositionWithReportType:type
+                                       successBlock:^(NSArray *puesArray){
+            if (puesArray && ![puesArray isEqual:[NSNull null]] && puesArray.count > 0)
+            {
+                NSMutableArray *array = [NSMutableArray array];
+                [puesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [array addObject:@{@"time":obj[@"time"],@"count":obj[@"pue"]}];
+                }];
+                [weakSelf createGraph:array];
+            }
+            else
+            {
+                self.errorView.hidden = NO;
+            }
+            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        }
+                                    andFailureBlock:^{
+            self.errorView.hidden = NO;
+            [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+        }];
+    }
+    
 }
 
 - (IBAction)graphSegmentValueChanged:(id)sender
@@ -94,6 +132,12 @@
         self.frame = _chartView.frame;
     }
     
+    if (routinsArray == nil || routinsArray.count == 0)
+    {
+        self.errorView.hidden = NO;
+        return;
+    }
+    
     self.chartView = [[LineChartView alloc]initWithFrame:self.frame];
     [_trendGraphBack addSubview:self.chartView];
     _chartView.delegate = self;
@@ -103,14 +147,18 @@
     _chartView.noDataTextDescription = @"You need to provide data for the chart.";
     
     _chartView.dragEnabled = YES;
-    [_chartView setScaleEnabled:YES];
+    [_chartView setScaleEnabled:NO];
     _chartView.pinchZoomEnabled = NO;
     _chartView.drawGridBackgroundEnabled = YES;
+    NSNumberFormatter *format = [[NSNumberFormatter alloc]init];
+    format.maximumFractionDigits = 1;
     _chartView.xAxis.labelTextColor = [UIColor darkGrayColor];
     _chartView.leftAxis.labelTextColor = [UIColor darkGrayColor];
     _chartView.xAxis.labelPosition = XAxisLabelPositionBottom;
+    _chartView.xAxis.avoidFirstLastClippingEnabled = YES;
 //    _chartView.xAxis.labelFont = [UIFont systemFontOfSize:8];
     [_chartView.xAxis setLabelsToSkip:0];
+    _chartView.leftAxis.valueFormatter = format;
     _chartView.borderColor = [UIColor grayColor];
     
     ChartYAxis *leftAxis = _chartView.leftAxis;
@@ -124,13 +172,20 @@
     [_chartView.viewPortHandler setMaximumScaleY: 2.f];
     [_chartView.viewPortHandler setMaximumScaleX: 2.f];
     
-    
+//    BalloonMarker *marker = [[BalloonMarker alloc] initWithColor:[UIColor orangeColor] font:[UIFont systemFontOfSize:12.0] insets: UIEdgeInsetsMake(8.0, 8.0, 20.0, 8.0)];
+//    marker.minimumSize = CGSizeMake(80.f, 40.f);
+//    _chartView.marker = marker;
     _chartView.legend.form = ChartLegendFormLine;
     
     NSMutableArray *Xvalues = [NSMutableArray array];
     NSMutableArray *chartDataArray = [NSMutableArray array];
+    NSMutableArray *routinsArrayWrapper = [NSMutableArray arrayWithArray:routinsArray];
+    if (routinsArray.count == 1)
+    {
+        [routinsArrayWrapper insertObject:@{@"time":@"0",@"count":@"0"} atIndex:0];
+    }
     
-    [routinsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [routinsArrayWrapper enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSString *time = obj[@"time"];
         if ([Xvalues containsObject:time])
@@ -144,6 +199,8 @@
             [chartDataArray addObject:@([obj[@"count"] integerValue])];
         }
     }];
+    
+    
     
     NSMutableArray *xVals = [[NSMutableArray alloc] init];
     
@@ -172,7 +229,7 @@
     
     if (maxY < 10)
     {
-        maxY += 0;
+        maxY += 3;
     }
     else if (maxY < 50)
     {
@@ -194,12 +251,14 @@
     [set1 setColor:UIColor.redColor];
     [set1 setCircleColor:UIColor.orangeColor];
     set1.lineWidth = 1.0;
-    set1.circleRadius = 10.0;
+    set1.circleRadius = 5.0;
     set1.drawCircleHoleEnabled = YES;
     set1.drawCubicEnabled = NO;
     set1.valueFont = [UIFont systemFontOfSize:9.f];
+    set1.valueFormatter = format;
     set1.valueTextColor = [UIColor orangeColor];
     set1.fillAlpha = 65/255.0;
+    set1.cubicIntensity = 0;
     
     NSMutableArray *dataSets = [[NSMutableArray alloc] init];
     [dataSets addObject:set1];
@@ -209,6 +268,11 @@
     _chartView.leftAxis.customAxisMin = minY;
     _chartView.data = data;
     [_chartView animateWithXAxisDuration:1.0 yAxisDuration:1.0];
+    
+    UIView *shelterView = [[UIView alloc]initWithFrame:CGRectMake(15, self.frame.size.height - 34, 100, 30)];
+    shelterView.backgroundColor = [UIColor colorWithRed:242/255.0 green:246/255.0 blue:251/255.0 alpha:1];
+//    shelterView.backgroundColor = [UIColor blueColor];
+    [_chartView addSubview:shelterView];
 }
 
 

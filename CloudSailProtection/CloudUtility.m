@@ -29,6 +29,12 @@
     return [NSString stringWithFormat:@"%@000000",[dateString substringToIndex:8]];
 }
 
++ (NSString *)stringFromTodayEnd
+{
+    NSString *dateString = [self stringFromDateNow];
+    return [NSString stringWithFormat:@"%@235959",[dateString substringToIndex:8]];
+}
+
 + (NSString *)stringFromYesterdayStart
 {
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -59,12 +65,6 @@
     return [NSString stringWithFormat:@"%@235959",[preDatesString substringToIndex:8]];
 }
 
-+ (NSString *)stringFromTodayEnd
-{
-    NSString *dateString = [self stringFromDateNow];
-    return [NSString stringWithFormat:@"%@235959",[dateString substringToIndex:8]];
-}
-
 + (NSString *)stringFromMonth
 {
     NSString *dateString = [self stringFromDateNow];
@@ -74,7 +74,7 @@
 + (NSString *)stringFromYear
 {
     NSString *dateString = [self stringFromDateNow];
-    return [NSString stringWithFormat:@"%@0101000000",[dateString substringToIndex:4]];
+    return [NSString stringWithFormat:@"%d1231235959",[[dateString substringToIndex:4]intValue] - 1];
 }
 
 + (NSString *)stringFromFiveDaysAgo
@@ -86,10 +86,10 @@
     NSDateComponents *adcomps = [[NSDateComponents alloc] init];
     [adcomps setYear:0];
     [adcomps setMonth:0];
-    [adcomps setDay:-4];
+    [adcomps setDay:-5];
     NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
     NSString *preDatesString = [self stringFromDate:newdate];
-    return [NSString stringWithFormat:@"%@000000",[preDatesString substringToIndex:8]];
+    return [NSString stringWithFormat:@"%@235959",[preDatesString substringToIndex:8]];
 }
 
 + (NSString *)stringFromFiveMonsAgo
@@ -104,7 +104,7 @@
     [adcomps setDay:0];
     NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
     NSString *preDatesString = [self stringFromDate:newdate];
-    return [NSString stringWithFormat:@"%@000000",[preDatesString substringToIndex:8]];
+    return [NSString stringWithFormat:@"%@235959",[preDatesString substringToIndex:8]];
 }
 
 + (NSString *)stringFromFiveYearsAgo
@@ -119,7 +119,7 @@
     [adcomps setDay:0];
     NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:now options:0];
     NSString *preDatesString = [self stringFromDate:newdate];
-    return [NSString stringWithFormat:@"%@000000",[preDatesString substringToIndex:8]];
+    return [NSString stringWithFormat:@"%@235959",[preDatesString substringToIndex:8]];
 }
 
 + (BOOL)isIphone6S
@@ -134,9 +134,9 @@
 
 + (NSString *)stringForRoutingDateWithRoutingTime:(NSString *)intervalTime
 {
-    NSDate *dateTime = [NSDate dateWithTimeIntervalSince1970:[intervalTime integerValue]];
+    NSDate *dateTime = [NSDate dateWithTimeIntervalSince1970:[intervalTime integerValue]/1000];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"hh:mm"];
+    [dateFormatter setDateFormat:@"HH:mm"];
     NSString *destDateString = [dateFormatter stringFromDate:dateTime];
     
     return destDateString;

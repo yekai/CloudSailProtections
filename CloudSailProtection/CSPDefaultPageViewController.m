@@ -141,6 +141,11 @@
     //make pull request to get default dash data model
     [Post getDefaultPageAttributesWithBlock:^(NSDictionary *mainDict) {
         //create default dash data model from response json
+        if ([mainDict isEqual:[NSNull null]])
+        {
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+            return ;
+        }
         DefaultMainObj *obj = [[DefaultMainObj alloc]initWithMainDict:mainDict];
         weakSelf.mainAttributes = obj;
         //hide loading view
@@ -149,9 +154,6 @@
         [weakSelf createGraphicsFromAttributes];
     }
                             andFailureBlock:^{
-        //display the login page if the server response fail
-        CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-        [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
     }];
 }
 
@@ -315,7 +317,7 @@
     self.trackBarChart.labelTextColor = blueColor;
     self.trackBarChart.showChartBorder = YES;
     [self.trackBarChart setXLabels:xStatus];
-    [self.trackBarChart setYMaxValue:maxY + 50];
+    [self.trackBarChart setYMaxValue:maxY];
     [self.trackBarChart setYValues:numbers];
     [self.trackBarChart setStrokeColors:backColors];
     self.trackBarChart.isGradientShow = NO;
@@ -349,6 +351,7 @@
         [self.warningBarChart removeFromSuperview];
     }
     
+    
     NSNumberFormatter *barChartFormatter = [self defaultNumberFormatter];
     
     NSMutableArray *numbers = [self.mainAttributes alarmsNumberArray];
@@ -356,6 +359,7 @@
     NSMutableArray *backColors = [self.mainAttributes alarmsChartColors];
     UIColor *blueColor = [self.mainAttributes chartColorForDefaultPage];
     NSInteger maxY = [self.mainAttributes maxAlarmsNumber];
+    
     
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat width = [self.warningChartTrailingConstraint constant] == 10 ? screenWidth - 20 : (screenWidth - 30)/2.0;
@@ -382,7 +386,7 @@
     self.warningBarChart.labelTextColor = blueColor;
     self.warningBarChart.showChartBorder = YES;
     [self.warningBarChart setXLabels:xStatus];
-    [self.warningBarChart setYMaxValue:maxY + 7000];
+    [self.warningBarChart setYMaxValue:maxY];
     [self.warningBarChart setYValues:numbers];
     [self.warningBarChart setStrokeColors:backColors];
     self.warningBarChart.isGradientShow = NO;
@@ -563,5 +567,13 @@
 - (void)toggleCircleChartShelterView
 {
     [self.circleChart toggleShelterViewBackColor];
+}
+
+- (void)removeDefaultCharts
+{
+    [self.warningBarChart removeFromSuperview];
+    [self.trackBarChart removeFromSuperview];
+    self.warningBarChart = nil;
+    self.trackBarChart = nil;
 }
 @end

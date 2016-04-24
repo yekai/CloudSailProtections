@@ -18,6 +18,8 @@
 @interface ContactsTableViewController ()
 @property (nonatomic, strong) NSMutableArray *contactsArray;
 @property (nonatomic, strong) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
+
 @end
 
 @implementation ContactsTableViewController
@@ -43,11 +45,13 @@
     {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(closeContacts)];
     }
+    
 }
 
 //create pull request to load server contacts info
 - (void)reloadCommunicators
 {
+    self.errorView.hidden = YES;
     __block ContactsTableViewController *weakSelf = self;
     
     if (!_contactsArray)
@@ -55,16 +59,25 @@
         _contactsArray = [NSMutableArray array];
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         __block NSMutableArray *weakContacts = _contactsArray;
-        [Post getCommunicationsInfoWithBlock:^(NSArray *communicationsArray) {
-            [communicationsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                Communicator *comm = [[Communicator alloc]initWithCommunicatorAttribute:obj];
-                [weakContacts addObject:comm];
-            }];
-            [weakSelf.tableView reloadData];
+        [Post getCommunicationsInfoWithBlock:^(NSArray *communicationsArray)
+        {
+            if (communicationsArray && ![communicationsArray isEqual:[NSNull null]] && communicationsArray.count > 0)
+            {
+                [communicationsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    Communicator *comm = [[Communicator alloc]initWithCommunicatorAttribute:obj];
+                    [weakContacts addObject:comm];
+                }];
+                [weakSelf.tableView reloadData];
+            }
+            else
+            {
+                weakSelf.errorView.hidden = NO;
+            }
+            
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
         }andFailureBlock:^{
-            CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-            [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+            weakSelf.errorView.hidden = NO;
+            [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
         }];
     }
     

@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentView;
 @property (nonatomic, strong) NSMutableArray *energyConsumptions;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
 
 @end
 
@@ -38,6 +39,8 @@
     UIBarButtonItem *pue = [[UIBarButtonItem alloc]initWithTitle:@"PUE统计" style:UIBarButtonItemStylePlain target:self action:@selector(presentPueTrendGraphy)];
     
     self.navigationItem.rightBarButtonItems = @[close,pue];
+    
+    self.errorView.hidden = YES;
     
     [self reloadPUEHisData];
 }
@@ -65,16 +68,24 @@
         type = @"Yea";
     }
     
+    self.errorView.hidden = YES;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [Post getPUEHisDataByPositionWithReportType:type
                                    successBlock:^(NSArray *puesArray){
-        [puesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            PUEObj *pue = [[PUEObj alloc]initWithPUEAttribute:obj];
-            [weakEnergyConsumptions addObject:pue];
-        }];
-        
+                                       
+        if (puesArray && ![puesArray isEqual:[NSNull null]] && puesArray.count > 0)
+        {
+            [puesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                PUEObj *pue = [[PUEObj alloc]initWithPUEAttribute:obj];
+                [weakEnergyConsumptions addObject:pue];
+            }];
+            [weakTable reloadData];
+        }
+        else
+        {
+            self.errorView.hidden = NO;
+        }
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [weakTable reloadData];
     }
                                 andFailureBlock:^{
         CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];

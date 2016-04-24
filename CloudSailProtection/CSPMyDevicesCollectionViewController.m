@@ -49,12 +49,18 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
         [Post getDeviceType2WithType1:self.deviceObj.typeId
                                 count:self.deviceObj.typeCount
                          successBlock:^(NSArray *deviceInfoArray) {
+             if ([deviceInfoArray isEqual:[NSNull null]])
+             {
+                 [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+                 return ;
+             }
             [deviceInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 DeviceAssets *deviceObj = [[DeviceAssets alloc]initWithDeviceAssetsDict:obj];
                 [weakSelf.devicesArray addObject:deviceObj];
             }];
             //display the related device collection items
             [weakSelf.collectionView reloadData];
+            [weakSelf performSelector:@selector(createBadgeView) withObject:nil afterDelay:0.5];
             [MBProgressHUD hideHUDForView:self.view animated:YES];
         }
                      andFailureBlock:^{
@@ -88,6 +94,19 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
     // Dispose of any resources that can be recreated.
 }
 
+- (void)createBadgeView
+{
+    __weak UICollectionView *weakCollectionView = self.collectionView;
+    [_devicesArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        DeviceAssets *category = (DeviceAssets*)obj;
+        MyDeviceCollectionViewCell *cell = (MyDeviceCollectionViewCell*)[weakCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:idx inSection:0]];
+        if ([category.count floatValue] != 0.0)
+        {
+            [cell configureCellWithBadgeNumber:[@([category.count floatValue]) stringValue]];
+        }
+    }];
+}
+
 
 #pragma mark <UICollectionViewDataSource>
 
@@ -116,7 +135,7 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     DeviceAssets *deviceObj = (DeviceAssets*)(self.devicesArray[indexPath.row]);
-    
+    MyDeviceCollectionViewCell *cell = (MyDeviceCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     if ([deviceObj.deviceCount floatValue] == 0)
     {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"注意" message:@"该设备数目为0." preferredStyle:UIAlertControllerStyleAlert];
@@ -127,15 +146,15 @@ static NSString * const reuseIdentifier = @"MyDeviceCellIdentifier";
         
         return;
     }
-
     
+    [cell hideBadge];
     CSPAssetsInfoDetailViewController *myDevice = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass(CSPAssetsInfoDetailViewController.class)];
     myDevice.assets = deviceObj;
     [self.navigationController pushViewController:myDevice animated:YES];
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return [CloudUtility isIphone6S] ? 50 : 30;
+    return [CloudUtility isIphone6S] ? 30 : 10;
 }
 
 - (void)displayHomeViewWithTabIndex:(NSInteger)index

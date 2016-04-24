@@ -27,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *routingNameLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *routingAboveImage;
 @property (weak, nonatomic) IBOutlet UIView *leftLineView;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
 
 @end
 
@@ -45,6 +46,7 @@
 {
     [super viewDidAppear:animated];
     [self reloadRoutings];
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
 - (void)closeSelf
@@ -54,6 +56,7 @@
 
 - (void)reloadRoutings
 {
+    
     if (!self.routingArray)
     {
         self.routingArray = [NSMutableArray array];
@@ -65,13 +68,19 @@
     __block CSPRoutingViewController *weakSelf = self;
     __block NSMutableArray *set = [NSMutableArray array];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.tableView.hidden = YES;
     self.routingAboveImage.hidden = YES;
     self.routingNameLabel.hidden = YES;
     self.leftLineView.hidden = YES;
+    self.errorView.hidden = YES;
     [Post getRoutiningInfoByDate:self.segmentView.selectedSegmentIndex == 0
                  andSuccessBlock:^(NSDictionary *routingDict)
      {
+         if ([routingDict isEqual:[NSNull null]] || [routingDict[@"tdata"]isEqual:[NSNull null]])
+         {
+             [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+             self.errorView.hidden = NO;
+             return ;
+         }
          NSString *routingName = routingDict[@"name"];
          weakSelf.routingName = routingName;
         [routingDict[@"tdata"] enumerateObjectsUsingBlock:^(id  _Nonnull routingObj, NSUInteger routingIdx, BOOL * _Nonnull stopFirst) {
@@ -171,19 +180,17 @@
         self.routingAboveImage.hidden = NO;
         self.routingNameLabel.hidden = NO;
         self.leftLineView.hidden = NO;
+        [self.tableView reloadData];
     }
-    
-    [self.tableView reloadData];
+    else
+    {
+        self.errorView.hidden = NO;
+    }
     [MBProgressHUD hideHUDForView:self.view animated:YES];
-    self.tableView.hidden = NO;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.routingArray count] == 0)
-    {
-        return 300;
-    }
     NSDictionary *dict = [self.routingArray objectAtIndex:indexPath.row];
     NSMutableArray *keyValue = dict.allValues.lastObject;
     return self.selectedRow == indexPath.row ? 60 + (keyValue.count + 1) * 20 : 50;
@@ -197,7 +204,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     NSInteger count = [self.routingArray count];
-    return count == 0 ? 1 : count;
+    return count;
 }
 
 - (void)timePointBtnTapped:(RoutingsTableViewCell *)cell

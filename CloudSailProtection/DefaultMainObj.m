@@ -137,12 +137,13 @@
 
 - (NSMutableArray *)faultsNumberArray
 {
-    NSMutableArray *numbers = [NSMutableArray arrayWithArray:@[@(-1),@(-1),@(-1),@(-1),@(-1),@(-1)]];
+    NSMutableArray *numbers = [NSMutableArray arrayWithArray:@[@(0),@(0),@(0),@(0),@(0),@(0)]];
     NSArray *xStatus = [self faultsXstatus];
     [self.faultInfos enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop){
          NSInteger index = [xStatus indexOfObject:obj[@"statusName"]];
          [numbers replaceObjectAtIndex:index withObject:@([obj[@"count"] integerValue])];
      }];
+    
     
     return numbers;
 }
@@ -159,6 +160,31 @@
         }
     }];
     
+    if (maxY < 10)
+    {
+        maxY += 1;
+    }
+    else if (maxY < 20)
+    {
+        maxY += 3;
+    }
+    else if (maxY < 50)
+    {
+        maxY += 5;
+    }
+    else if (maxY <100)
+    {
+        maxY += 20;
+    }
+    else if (maxY < 500)
+    {
+        maxY += 50;
+    }
+    else if (maxY <1000)
+    {
+        maxY += 100;
+    }
+    
     return maxY;
 }
 
@@ -174,6 +200,30 @@
         }
     }];
     
+    if (maxY < 10)
+    {
+        maxY += 1;
+    }
+    else if (maxY < 20)
+    {
+        maxY += 3;
+    }
+    else if (maxY < 50)
+    {
+        maxY += 5;
+    }
+    else if (maxY <100)
+    {
+        maxY += 20;
+    }
+    else if (maxY < 500)
+    {
+        maxY += 50;
+    }
+    else if (maxY <1000)
+    {
+        maxY += 100;
+    }
     return maxY;
 }
 @end

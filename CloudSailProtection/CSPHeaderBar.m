@@ -63,11 +63,12 @@ static BOOL isMessageViewDismiss = NO;
     __block NSUInteger width = 0;
     __weak CSPHeaderBar *weakSelf = self;
     [dataSources enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CGRect frame = weakSelf.scrollContentView.frame;
         UIButton *label = [weakSelf createBtnWithText:obj];
-        NSUInteger originY = (weakSelf.noticeScrollView.bounds.size.height - label.bounds.size.height)/2;
+        NSUInteger originY = 0;
         NSUInteger originX = width;
         width += label.bounds.size.width + 20;
-        label.frame = CGRectMake(originX, originY, weakSelf.bounds.size.width, label.bounds.size.height);
+        label.frame = CGRectMake(originX, originY, label.bounds.size.width, frame.size.height);
         [weakSelf.scrollContentView addSubview:label];
     }];
     
@@ -89,6 +90,7 @@ static BOOL isMessageViewDismiss = NO;
     btn.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     btn.titleLabel.textColor = [UIColor whiteColor];
     btn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    btn.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     [btn setTitle:text forState:UIControlStateNormal];
     [btn setTitle:text forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(didSelectNotice) forControlEvents:UIControlEventTouchUpInside];
@@ -121,10 +123,7 @@ static BOOL isMessageViewDismiss = NO;
     [alert.cancelButton setTitle:@"取消" forState:UIControlStateNormal];
     alert.cornerRadius = 3.0f;
     alert.delegate = self;
-    
     [alert show];
-
-    
 }
 
 -(void) alertView:(AMSmoothAlertView *)alertView didDismissWithButton:(UIButton *)button

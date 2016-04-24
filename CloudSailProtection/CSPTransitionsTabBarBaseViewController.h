@@ -17,5 +17,5 @@
 - (BOOL)getReloadStatus;
 - (void)setReloadStatus:(BOOL)status;
 - (void)toggleCircleChartShelterView;
-
+- (void)removeDefaultCharts;
 @end

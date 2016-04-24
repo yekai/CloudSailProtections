@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "CSPTransitionsTabBarBaseViewController.h"
+#import "EGORefreshTableHeaderView.h"
+#import "LoadMoreTableFooterView.h"
 
-@interface CSPBreakdownsViewController : CSPTransitionsTabBarBaseViewController
+@interface CSPBreakdownsViewController : CSPTransitionsTabBarBaseViewController<UITableViewDataSource,UITableViewDelegate,EGORefreshTableHeaderDelegate, LoadMoreTableFooterDelegate>
 
 @end

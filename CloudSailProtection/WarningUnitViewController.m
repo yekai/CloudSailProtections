@@ -187,8 +187,8 @@
     
     NSMutableArray *colors = [[NSMutableArray alloc] init];
     [colors addObject:[UIColor redColor]];
-    [colors addObject:[UIColor blueColor]];
     [colors addObject:[UIColor greenColor]];
+    [colors addObject:[UIColor blueColor]];
     [colors addObject:[UIColor grayColor]];
     [colors addObject:[UIColor orangeColor]];
     [colors addObject:[UIColor yellowColor]];

@@ -16,6 +16,7 @@
 #import "CSPLoginViewController.h"
 #import "UIStoryBoard+New.h"
 #import "AMSmoothAlertView.h"
+#import "CSPDefaultPageViewController.h"
 
 static BOOL isReloadApps = NO;
 static NSMutableArray *noticeArray = nil;
@@ -51,6 +52,10 @@ static NSMutableArray *noticeArray = nil;
     //create notice pull request
     [Post getCorporationNoticeWithBlock:^(NSArray *noticeArray) {
         //parse notice response and set notice array
+        if ([noticeArray isEqual:[NSNull null]])
+        {
+            return ;
+        }
         [noticeArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             [_noticeArray addObject:[[Notice alloc]initWithAttribute:obj]];
         }];
@@ -176,7 +181,16 @@ static NSMutableArray *noticeArray = nil;
         
         [self.headerBar reloadNoticeBar];
         [self toggleCircleChartShelterView];
+        if([self isKindOfClass:[CSPDefaultPageViewController class]])
+        {
+            [self removeDefaultCharts];
+        }
     }
+}
+
+- (void)removeDefaultCharts
+{
+    
 }
 
 - (void)toggleCircleChartShelterView

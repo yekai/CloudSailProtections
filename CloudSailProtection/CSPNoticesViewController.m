@@ -19,6 +19,8 @@
 @interface CSPNoticesViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableview;
 @property (nonatomic, strong) NSMutableArray *notices;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
+
 @end
 
 @implementation CSPNoticesViewController
@@ -39,6 +41,7 @@
 //create pull request to load remote server notices info
 - (void)reloadNotices
 {
+    self.errorView.hidden = YES;
     __block CSPNoticesViewController *weakSelf = self;
     
     if (!_notices)
@@ -46,6 +49,12 @@
         _notices = [NSMutableArray array];
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [Post getNoticeHistoryWithBlock:^(NSArray *noticeHistoryArray) {
+            if ([noticeHistoryArray isEqual:[NSNull null]])
+            {
+                [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+                self.errorView.hidden = NO
+                ;                return ;
+            }
             [noticeHistoryArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 Notice *notice = [[Notice alloc]initWithAttribute:obj];
                 [weakSelf.notices addObject:notice];
@@ -55,8 +64,9 @@
             [weakSelf.tableview reloadData];
         }
                         andFailureBlock:^{
-            CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-            [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+                            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+                            self.errorView.hidden = NO
+                            ;
         }];
     }
 }

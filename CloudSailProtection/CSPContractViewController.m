@@ -19,6 +19,7 @@
 @interface CSPContractViewController ()
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *contracts;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
 @end
 
 @implementation CSPContractViewController
@@ -38,6 +39,7 @@
 //create pull request to load server contracts
 - (void)reloadAgreements
 {
+    self.errorView.hidden = YES;
     __block CSPContractViewController *weakSelf = self;
     if (!_contracts)
     {
@@ -45,6 +47,12 @@
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
         [Post getAgreementsInfoWithBlock:^(NSArray *agreementsArray) {
+            if ([agreementsArray isEqual:[NSNull null]])
+            {
+                [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+                self.errorView.hidden = NO;
+                return ;
+            }
             [agreementsArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 [weakSelf.contracts addObject:[[Agreements alloc]initWithAgreementsAttribute:obj]];
             }];
@@ -53,8 +61,9 @@
             [weakSelf.tableView reloadData];
         }
                          andFailureBlock:^{
-            CSPLoginViewController *login = [UIStoryboard instantiateControllerWithIdentifier:NSStringFromClass([CSPLoginViewController class])];
-            [[[CSPGlobalViewControlManager sharedManager]rootCotrol]presentViewController:login animated:YES completion:nil];
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+            self.errorView.hidden = NO;
+
         }];
     }
 }

@@ -28,8 +28,8 @@
 + (NSURLSessionDataTask *)getCorporationNoticeWithBlock:(void (^)(NSArray *noticeArray))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getAlarmsCountWithBlock:(void (^)(NSUInteger count))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getFaultsCountWithBlock:(void (^)(NSUInteger count))block andFailureBlock:(void (^)())fblock;
-+ (NSURLSessionDataTask *)getAlarmsWithBlock:(void (^)(NSArray *alarmArray))block andFailureBlock:(void (^)())fblock;
-+ (NSURLSessionDataTask *)getFaultsWithBlock:(void (^)(NSArray *faultsArray))block andFailureBlock:(void (^)())fblock;
++ (NSURLSessionDataTask *)getAlarmsForPage:(NSInteger)page andSuccessBlock:(void (^)(NSArray *alarmArray))block andFailureBlock:(void (^)())fblock;
++ (NSURLSessionDataTask *)getFaultsForPage:(NSInteger)page andSuccessBlock:(void (^)(NSArray *faultsArray))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getHealthNumberWithBlock:(void (^)(NSUInteger count))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getDefaultPageAttributesWithBlock:(void (^)(NSDictionary *mainDict))block andFailureBlock:(void (^)())fblock;
 + (NSURLSessionDataTask *)getPUEHisDataByPositionWithReportType:(NSString *)type successBlock:(void (^)(NSArray *puesArray))block andFailureBlock:(void (^)())fblock;

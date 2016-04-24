@@ -44,7 +44,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
          NSError *parseError = nil;
          id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
          
-         if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+         if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
          {
              NSLog(@"json parse failure");
              isSuccess = NO;
@@ -86,7 +86,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 NSError *parseError = nil;
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -123,7 +123,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 NSError *parseError = nil;
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -160,7 +160,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 NSError *parseError = nil;
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -195,7 +195,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 NSError *parseError = nil;
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -213,14 +213,14 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
             }];
 }
 
-+ (NSURLSessionDataTask *)getAlarmsWithBlock:(void (^)(NSArray *alarmArray))block andFailureBlock:(void (^)())fblock
++ (NSURLSessionDataTask *)getAlarmsForPage:(NSInteger)page andSuccessBlock:(void (^)(NSArray *alarmArray))block andFailureBlock:(void (^)())fblock
 {
     NSString *userId = [[SessionManager sharedManager].user loginId];
     NSString *token = [[SessionManager sharedManager]token];
     NSString *password = [[SessionManager sharedManager].user password];
     NSString *dateString = [CloudUtility stringFromDateNow];
 
-    NSString *requestPath = [NSString stringWithFormat:@"alarm/info/GetAlarmInfo/-1/20120807090733/%@/-1/-1/alarmTime desc/1/10/%@/%@/%@",dateString, userId,password,token];
+    NSString *requestPath = [NSString stringWithFormat:@"alarm/info/GetAlarmInfo/-1/20120807090733/%@/-1/-1/alarmTime desc/%ld/10/%@/%@/%@",dateString,page,userId,password,token];
     requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
     return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
                                          parameters:nil
@@ -233,7 +233,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] ||![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -252,15 +252,15 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
 
 }
 
-+ (NSURLSessionDataTask *)getFaultsWithBlock:(void (^)(NSArray *faultsArray))block andFailureBlock:(void (^)())fblock
++ (NSURLSessionDataTask *)getFaultsForPage:(NSInteger)page andSuccessBlock:(void (^)(NSArray *faultsArray))block andFailureBlock:(void (^)())fblock
 {
     NSString *userId = [[SessionManager sharedManager].user loginId];
     NSString *token = [[SessionManager sharedManager]token];
     NSString *password = [[SessionManager sharedManager].user password];
-    NSString *dateString = [CloudUtility stringFromDateNow];
+    NSString *dateString = [CloudUtility stringFromTodayEnd];
     NSString *yearDateString = [CloudUtility stringFromYear];
 
-    NSString *requestPath = [NSString stringWithFormat:@"fault/info/GetFaultInfo/%@/%@/-1/createTime desc/1/200/%@/%@/%@",yearDateString, dateString, userId,password,token];
+    NSString *requestPath = [NSString stringWithFormat:@"fault/info/GetFaultInfo/%@/%@/-1/createTime desc/%ld/15/%@/%@/%@",yearDateString, dateString,page, userId,password,token];
     requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
     return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
                                          parameters:nil
@@ -273,7 +273,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -309,9 +309,10 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] ||  ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
+                    NSLog(@"%@",[[NSString alloc]initWithData:loginResponse encoding:3]);
                     isSuccess = NO;
                 }
                 
@@ -332,7 +333,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *userId = [[SessionManager sharedManager].user loginId];
     NSString *token = [[SessionManager sharedManager]token];
     NSString *password = [[SessionManager sharedManager].user password];
-    NSString *dateString = [CloudUtility stringFromDateNow];
+    NSString *dateString = [CloudUtility stringFromTodayEnd];
     NSString *previousString = nil;
     if ([type isEqualToString:@"Day"])
     {
@@ -360,7 +361,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError ||  [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -388,7 +389,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *dateString = isToday ? [CloudUtility stringFromTodayEnd] : [CloudUtility stringFromYesterdayEnd];
     NSString *previousDateString = isToday ? [CloudUtility stringFromTodayStart] : [CloudUtility stringFromYesterdayStart];
     
-    NSString *requestPath = [NSString stringWithFormat:@"GetRoutingInfo/%@/%@/-1/time asc/%@/%@/%@",previousDateString, dateString, userId,password,token];
+    NSString *requestPath = [NSString stringWithFormat:@"GetRoutingInfo/%@/%@/-1/time desc/%@/%@/%@",previousDateString, dateString, userId,password,token];
     requestPath =  [requestPath stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"/-"]];
     return [[AFAppDotNetAPIClient sharedClient] GET:requestPath
                                          parameters:nil
@@ -401,7 +402,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"] || !jsonObj[@"routings"] || [jsonObj[@"routings"] count] == 0)
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"] || !jsonObj[@"routings"] || [jsonObj[@"routings"] count] == 0)
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -437,7 +438,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -475,7 +476,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -511,7 +512,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -547,7 +548,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -583,7 +584,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -624,7 +625,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -662,7 +663,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -697,7 +698,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 NSError *parseError = nil;
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"] || [jsonObj[@"puedatas"]isEqual:[NSNull null]] || [jsonObj[@"puedatas"]count] == 0)
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -738,7 +739,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -778,7 +779,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -802,7 +803,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
     NSString *userId = [[SessionManager sharedManager].user loginId];
     NSString *token = [[SessionManager sharedManager]token];
     NSString *password = [[SessionManager sharedManager].user password];
-    NSString *dateString = [CloudUtility stringFromDateNow];
+    NSString *dateString = [CloudUtility stringFromTodayEnd];
     
     NSString *selectedFirstDateString = nil;
     
@@ -834,7 +835,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -873,7 +874,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -912,7 +913,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError ||  [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;
@@ -952,7 +953,7 @@ static const NSString *kCloudRequestParseKey = @"com.alamofire.serialization.res
                 
                 id jsonObj = loginResponse ? [NSJSONSerialization JSONObjectWithData:loginResponse options:NSJSONReadingMutableContainers error:&parseError] : nil;
                 
-                if (!jsonObj || parseError || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
+                if (!jsonObj || parseError || [jsonObj[@"errorcode"] isEqual:[NSNull null]] || ![jsonObj[@"errorcode"] isEqualToString:@"0"])
                 {
                     NSLog(@"json parse failure");
                     isSuccess = NO;

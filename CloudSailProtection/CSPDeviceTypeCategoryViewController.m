@@ -44,6 +44,11 @@
         
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         [Post getDeviceType1WithBlock:^(NSArray *deviceInfoArray) {
+            if ([deviceInfoArray isEqual:[NSNull null]])
+            {
+                [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+                return ;
+            }
             [deviceInfoArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 DeviceTypeCategory *deviceObj = [[DeviceTypeCategory alloc]initWithDict:obj];
                 [weakSelf.devicesArray addObject:deviceObj];
