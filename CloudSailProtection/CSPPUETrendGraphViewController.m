@@ -269,9 +269,8 @@
     _chartView.data = data;
     [_chartView animateWithXAxisDuration:1.0 yAxisDuration:1.0];
     
-    UIView *shelterView = [[UIView alloc]initWithFrame:CGRectMake(15, self.frame.size.height - 34, 100, 30)];
+    UIView *shelterView = [[UIView alloc]initWithFrame:CGRectMake(15, self.frame.size.height - 15, 30, 5)];
     shelterView.backgroundColor = [UIColor colorWithRed:242/255.0 green:246/255.0 blue:251/255.0 alpha:1];
-//    shelterView.backgroundColor = [UIColor blueColor];
     [_chartView addSubview:shelterView];
 }
 

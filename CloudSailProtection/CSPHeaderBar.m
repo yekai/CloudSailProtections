@@ -56,7 +56,7 @@ static BOOL isMessageViewDismiss = NO;
     
     if ([[self.scrollContentView subviews]count] != 0)
     {
-        return;
+        [self.scrollContentView.subviews[0] removeFromSuperview];
     }
     [self setupActionBar];
     NSArray *dataSources = self.delegate ? [self.delegate dataSourceForScrollView] : nil;
@@ -67,8 +67,8 @@ static BOOL isMessageViewDismiss = NO;
         UIButton *label = [weakSelf createBtnWithText:obj];
         NSUInteger originY = 0;
         NSUInteger originX = width;
-        width += label.bounds.size.width + 20;
-        label.frame = CGRectMake(originX, originY, label.bounds.size.width, frame.size.height);
+        width += label.bounds.size.width + 50;
+        label.frame = CGRectMake(originX, originY, label.bounds.size.width + 50, frame.size.height);
         [weakSelf.scrollContentView addSubview:label];
     }];
     

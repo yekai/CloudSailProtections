@@ -130,6 +130,8 @@
 - (IBAction)segmentValueChanged:(id)sender
 {
     self.selectedRow = 0;
+    [self.routingArray removeAllObjects];
+    [self.tableView reloadData];
     [self reloadRoutings];
 }
 

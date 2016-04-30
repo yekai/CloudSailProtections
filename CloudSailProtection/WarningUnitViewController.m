@@ -45,6 +45,10 @@
 - (void)createCircleChartWithArray:(NSArray *)levelArray
 {
     levelArray = [[[CSPGlobalViewControlManager sharedManager] getDefaultPageControl]getAlarmsInfo];
+    if (!levelArray || levelArray.count == 0)
+    {
+        return;
+    }
     
     _chartView.delegate = self;
     
@@ -89,12 +93,16 @@
     
     
     [levelNumber enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (obj == [NSNull null])
+        if ([obj isEqual: [NSNull null]])
         {
             [levelNumber removeObjectAtIndex:idx];
         }
     }];
     
+    if (levelNumber.count == 0 || [levelNumber[0] isEqual:[NSNull null]] )
+    {
+        levelNumber = nil;
+    }
 
     [self setData:levelNumber];
     
@@ -114,34 +122,6 @@
     else if ([number integerValue] == 3)
     {
         return @"三级告警";
-    }
-    else if ([number integerValue] == 4)
-    {
-        return @"四级告警";
-    }
-    else if ([number integerValue] == 5)
-    {
-        return @"五级告警";
-    }
-    else if ([number integerValue] == 6)
-    {
-        return @"六级告警";
-    }
-    else if ([number integerValue] == 7)
-    {
-        return @"七级告警";
-    }
-    else if ([number integerValue] == 8)
-    {
-        return @"八级告警";
-    }
-    else if ([number integerValue] == 9)
-    {
-        return @"九级告警";
-    }
-    else if ([number integerValue] == 10)
-    {
-        return @"十级告警";
     }
     
     return nil;
@@ -174,30 +154,29 @@
     }
     
     NSMutableArray *xVals = [[NSMutableArray alloc] init];
-    
+    NSMutableArray *colors = [[NSMutableArray alloc] init];
     for (int i = 0; i < levelNumbers.count; i++)
     {
-        [xVals addObject:_parties[i % _parties.count]];
+        NSString *name = _parties[i % _parties.count];
+        [xVals addObject:name];
+        if ([name containsString:@"一"])
+        {
+            [colors addObject:[UIColor blueColor]];
+        }
+        else if ([name containsString:@"二"])
+        {
+            [colors addObject:[UIColor redColor]];
+        }
+        else
+        {
+            [colors addObject:[UIColor greenColor]];
+        }
     }
     
     PieChartDataSet *dataSet = [[PieChartDataSet alloc] initWithYVals:yVals1 label:@""];
     dataSet.sliceSpace = 2.0;
     
     // add a lot of colors
-    
-    NSMutableArray *colors = [[NSMutableArray alloc] init];
-    [colors addObject:[UIColor redColor]];
-    [colors addObject:[UIColor greenColor]];
-    [colors addObject:[UIColor blueColor]];
-    [colors addObject:[UIColor grayColor]];
-    [colors addObject:[UIColor orangeColor]];
-    [colors addObject:[UIColor yellowColor]];
-    [colors addObject:[UIColor cyanColor]];
-    [colors addObject:[UIColor magentaColor]];
-    [colors addObject:[UIColor purpleColor]];
-    [colors addObject:[UIColor brownColor]];
-    [colors addObject:[UIColor lightGrayColor]];
-    [colors addObject:[UIColor lightTextColor]];
     dataSet.colors = colors;
     
     PieChartData *data = [[PieChartData alloc] initWithXVals:xVals dataSet:dataSet];
